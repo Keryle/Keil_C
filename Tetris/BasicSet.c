@@ -2,12 +2,6 @@
 //本程序只供学习使用，未经作者许可，不得用于其它任何用途
 //测试硬件：STC51
 //1.44寸TFT_ST7735液晶驱动
-//淘宝网站：https://shop73023976.taobao.com/?spm=a1z10.1-c.0.0.8QF1fT
-//我司提供底层技术支持，任何技术问题欢迎随时交流学习
-//手机:18639000975(黄工)
-//QQ：2534656669
-//创建日期:2015/9/10
-//版本：V1.0
 //版权所有，盗版必究。
 //Copyright(C) 中景园电子
 //All rights reserved
@@ -19,6 +13,46 @@
 #include<string.h>
 #define uchar unsigned char
 #define uint unsigned int
+
+#define ST7735_NOP     0x00     //空指令
+#define ST7735_SWRESET 0x01
+#define ST7735_RDDID   0x04
+#define ST7735_RDDST   0x09
+#define ST7735_SLPIN   0x10
+#define ST7735_SLPOUT  0x11
+#define ST7735_PTLON   0x12
+#define ST7735_NORON   0x13
+#define ST7735_INVOFF  0x20
+#define ST7735_INVON   0x21
+#define ST7735_DISPOFF 0x28
+#define ST7735_DISPON  0x29
+#define ST7735_CASET   0x2A
+#define ST7735_RASET   0x2B
+#define ST7735_RAMWR   0x2C
+#define ST7735_RAMRD   0x2E
+#define ST7735_PTLAR   0x30
+#define ST7735_VSCRDEF 0x33
+#define ST7735_COLMOD  0x3A
+#define ST7735_MADCTL  0x36
+#define ST7735_VSCRSADD 0x37
+#define ST7735_FRMCTR1 0xB1
+#define ST7735_FRMCTR2 0xB2
+#define ST7735_FRMCTR3 0xB3
+#define ST7735_INVCTR  0xB4
+#define ST7735_DISSET5 0xB6
+#define ST7735_PWCTR1  0xC0
+#define ST7735_PWCTR2  0xC1
+#define ST7735_PWCTR3  0xC2
+#define ST7735_PWCTR4  0xC3
+#define ST7735_PWCTR5  0xC4
+#define ST7735_VMCTR1  0xC5
+#define ST7735_RDID1   0xDA
+#define ST7735_RDID2   0xDB
+#define ST7735_RDID3   0xDC
+#define ST7735_RDID4   0xDD
+#define ST7735_PWCTR6  0xFC
+#define ST7735_GMCTRP1 0xE0
+#define ST7735_GMCTRN1 0xE1
 
 //测试硬件平台：STC12LE5A60S2(3.3V单片机)
 //主频：12MHZ
@@ -32,13 +66,6 @@ sbit cs        =P1^4;//接模块CE引脚，接裸屏Pin12_CS
 sbit reset     =P1^2;//接模块RST引脚，接裸屏Pin6_RES
 //---------------------------End of液晶屏接线---------------------------------//
 
-
-//单片机IO推挽输出设置定义
-#define MCU_STC12//如果您使用的单片机不是STC12系列(如STC89C52)请屏蔽此宏定义
-#ifdef MCU_STC12
-sfr P3M1  = 0xB1;	//P3M1.n,P3M0.n 	=00--->Standard,	01--->push-pull
-sfr P3M0  = 0xB2;	//					=10--->pure input,	11--->open drain
-#endif
 
 //定义常用颜色
 #define RED  		0xf800
@@ -263,29 +290,4 @@ void LCD_Clear(unsigned int Color)
         	Lcd_WriteData_16(Color);
 		}
 	}
-}
-
-
-
-void main(void)
-{
-#ifdef MCU_STC12
-  P3M1 &= ~(1<<2),	P3M0 |=  (1<<2);	//P3.2 set as push-pull output mode
-#endif
-  lcd_initial(); //液晶屏初始化
-  bl=1;//背光采用IO控制，也可以直接接到高电平常亮
-  while(1)
-  {
-	LCD_Clear(RED);			//红色
-	delay(500);
-	LCD_Clear(GREEN);		//绿色
-	delay(500);
-	LCD_Clear(BLUE);		//蓝色
-	delay(500);
-	LCD_Clear(BLACK);		//黑色
-	delay(500);
-	LCD_Clear(WHITE);		//白色
-	delay(500);
-   }
-
 }

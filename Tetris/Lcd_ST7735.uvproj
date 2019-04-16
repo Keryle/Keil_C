@@ -377,9 +377,9 @@
           <GroupName>Source Group 1</GroupName>
           <Files>
             <File>
-              <FileName>test.c</FileName>
+              <FileName>st7735_TFT.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\test.c</FilePath>
+              <FilePath>.\st7735_TFT.c</FilePath>
             </File>
           </Files>
         </Group>

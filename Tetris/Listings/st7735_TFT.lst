@@ -1,0 +1,63 @@
+C51 COMPILER V9.59.0.0   ST7735_TFT                                                        04/16/2019 18:17:33 PAGE 1   
+
+
+C51 COMPILER V9.59.0.0, COMPILATION OF MODULE ST7735_TFT
+OBJECT MODULE PLACED IN .\Objects\st7735_TFT.obj
+COMPILER INVOKED BY: D:\Program Files (x86)\keil_v5\C51\BIN\C51.EXE st7735_TFT.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEX
+                    -TEND PRINT(.\Listings\st7735_TFT.lst) TABS(2) OBJECT(.\Objects\st7735_TFT.obj)
+
+line level    source
+
+   1          #include <BasicSet.c>
+   2          #define TFT_Width       128
+   3          #define TFT_Height      160
+   4          
+   5          void fillRectangle(unsigned short x, unsigned short y, unsigned short w, unsigned short h, unsigned int co
+             -lor){
+   6   1        if((x >= TFT_Width) || (y >= TFT_Height))
+   7   1          return;
+   8   1        if((x + w - 1) >= TFT_Width)
+   9   1          w = TFT_Width  - x;
+  10   1        if((y + h - 1) >= TFT_Height)
+  11   1          h = TFT_Height - y;
+  12   1        Lcd_SetRegion(x, y, x+w-1, y+h-1);
+  13   1        for(y = h; y > 0; y--) {
+  14   2          for(x = w; x > 0; x--) {
+  15   3            Lcd_WriteData_16(color);
+  16   3          }
+  17   2        }
+  18   1      }
+  19          
+  20          void main(void)
+  21          {
+  22   1      #ifdef MCU_STC12
+                P3M1 &= ~(1<<2),  P3M0 |=  (1<<2);  //P3.2 set as push-pull output mode
+              #endif
+  25   1        lcd_initial(); //液晶屏初始化
+  26   1        bl=1;//背光采用IO控制，也可以直接接到高电平常亮
+  27   1        LCD_Clear(BLACK);   //黑色
+  28   1        fillRectangle(50,50,60,60,RED);
+  29   1        fillRectangle(20,0,8,8,RED);
+  30   1        fillRectangle(0,0,8,8,RED);
+  31   1      
+  32   1      
+  33   1        while(1)
+  34   1        {
+  35   2        delay(500);
+  36   2         }
+  37   1      
+  38   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   1000    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----      22
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

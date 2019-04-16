@@ -1,3 +1,3 @@
-".\Objects\test.obj" 
+".\Objects\st7735_TFT.obj" 
 TO ".\Objects\Lcd_ST7735" 
 PRINT(".\Listings\Lcd_ST7735.m51") RAMSIZE(256) 
