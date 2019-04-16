@@ -2,7 +2,7 @@
 #define TFT_Width       128
 #define TFT_Height      160
 
-void fillRectangle(unsigned short x, unsigned short y, unsigned short w, unsigned short h, unsigned int color){
+void fillRectangle(unsigned char x, unsigned char y, unsigned char w, unsigned char h, unsigned int color){
   if((x >= TFT_Width) || (y >= TFT_Height))
     return;
   if((x + w - 1) >= TFT_Width)
@@ -17,6 +17,13 @@ void fillRectangle(unsigned short x, unsigned short y, unsigned short w, unsigne
   }
 }
 
+void fillPoint(unsigned char x, unsigned char y, unsigned int color ) { // 8X8 square
+  unsigned char i;
+  Lcd_SetRegion(x, y, x+7, y+7);
+  for(i = 64; i > 0; i-- )
+    Lcd_WriteData_16(color);
+}
+
 void main(void)
 {
 #ifdef MCU_STC12
@@ -28,6 +35,7 @@ void main(void)
   fillRectangle(50,50,60,60,RED);
   fillRectangle(20,0,8,8,RED);
 	fillRectangle(0,0,8,8,RED);
+  fillPoint(0,40,GREEN);
 
 
   while(1)

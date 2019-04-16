@@ -1,4 +1,4 @@
-C51 COMPILER V9.59.0.0   ST7735_TFT                                                        04/16/2019 18:17:33 PAGE 1   
+C51 COMPILER V9.59.0.0   ST7735_TFT                                                        04/16/2019 18:53:30 PAGE 1   
 
 
 C51 COMPILER V9.59.0.0, COMPILATION OF MODULE ST7735_TFT
@@ -12,8 +12,8 @@ line level    source
    2          #define TFT_Width       128
    3          #define TFT_Height      160
    4          
-   5          void fillRectangle(unsigned short x, unsigned short y, unsigned short w, unsigned short h, unsigned int co
-             -lor){
+   5          void fillRectangle(unsigned char x, unsigned char y, unsigned char w, unsigned char h, unsigned int color)
+             -{
    6   1        if((x >= TFT_Width) || (y >= TFT_Height))
    7   1          return;
    8   1        if((x + w - 1) >= TFT_Width)
@@ -28,33 +28,43 @@ line level    source
   17   2        }
   18   1      }
   19          
-  20          void main(void)
-  21          {
-  22   1      #ifdef MCU_STC12
+  20          void fillPoint(unsigned char x, unsigned char y, unsigned int color ) { // 8X8 square
+  21   1        unsigned char i;
+  22   1        Lcd_SetRegion(x, y, x+7, y+7);
+  23   1        for(i = 64; i > 0; i-- )
+  24   1          Lcd_WriteData_16(color);
+  25   1      }
+  26          
+  27          void main(void)
+  28          {
+  29   1      #ifdef MCU_STC12
                 P3M1 &= ~(1<<2),  P3M0 |=  (1<<2);  //P3.2 set as push-pull output mode
               #endif
-  25   1        lcd_initial(); //液晶屏初始化
-  26   1        bl=1;//背光采用IO控制，也可以直接接到高电平常亮
-  27   1        LCD_Clear(BLACK);   //黑色
-  28   1        fillRectangle(50,50,60,60,RED);
-  29   1        fillRectangle(20,0,8,8,RED);
-  30   1        fillRectangle(0,0,8,8,RED);
-  31   1      
-  32   1      
-  33   1        while(1)
-  34   1        {
-  35   2        delay(500);
-  36   2         }
-  37   1      
-  38   1      }
+  32   1        lcd_initial(); //液晶屏初始化
+  33   1        bl=1;//背光采用IO控制，也可以直接接到高电平常亮
+  34   1        LCD_Clear(BLACK);   //黑色
+  35   1        fillRectangle(50,50,60,60,RED);
+  36   1        fillRectangle(20,0,8,8,RED);
+  37   1        fillRectangle(0,0,8,8,RED);
+  38   1        fillPoint(0,40,GREEN);
+  39   1      
+  40   1      
+  41   1        while(1)
+  42   1        {
+  43   2        delay(500);
+  44   2         }
+  45   1      
+  46   1      }
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =   1000    ----
+   CODE SIZE        =   1011    ----
    CONSTANT SIZE    =   ----    ----
    XDATA SIZE       =   ----    ----
    PDATA SIZE       =   ----    ----
-   DATA SIZE        =   ----      22
+C51 COMPILER V9.59.0.0   ST7735_TFT                                                        04/16/2019 18:53:30 PAGE 2   
+
+   DATA SIZE        =   ----      21
    IDATA SIZE       =   ----    ----
    BIT SIZE         =   ----    ----
 END OF MODULE INFORMATION.

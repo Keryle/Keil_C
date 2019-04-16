@@ -1,4 +1,4 @@
-BL51 BANKED LINKER/LOCATER V6.22.2.0                                                    04/16/2019  18:17:33  PAGE 1
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                    04/16/2019  18:53:36  PAGE 1
 
 
 BL51 BANKED LINKER/LOCATER V6.22.2.0, INVOKED BY:
@@ -22,24 +22,25 @@ LINK MAP OF MODULE:  .\Objects\Lcd_ST7735 (ST7735_TFT)
 
             * * * * * * *   D A T A   M E M O R Y   * * * * * * *
             REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
-            DATA    0008H     0013H     UNIT         _DATA_GROUP_
-            IDATA   001BH     0001H     UNIT         ?STACK
+            DATA    0008H     000FH     UNIT         _DATA_GROUP_
+            IDATA   0017H     0001H     UNIT         ?STACK
 
             * * * * * * *   C O D E   M E M O R Y   * * * * * * *
             CODE    0000H     0003H     ABSOLUTE     
                     0003H     07FDH                  *** GAP ***
             CODE    0800H     01AEH     UNIT         ?PR?LCD_INITIAL?ST7735_TFT
-            CODE    09AEH     00DDH     UNIT         ?PR?_FILLRECTANGLE?ST7735_TFT
-            CODE    0A8BH     0060H     UNIT         ?PR?MAIN?ST7735_TFT
-            CODE    0AEBH     003DH     UNIT         ?PR?_LCD_SETREGION?ST7735_TFT
-            CODE    0B28H     003CH     UNIT         ?PR?_LCD_CLEAR?ST7735_TFT
-            CODE    0B64H     0022H     UNIT         ?PR?_SPI_WRITEDATA?ST7735_TFT
-            CODE    0B86H     0020H     UNIT         ?PR?_DELAY?ST7735_TFT
-            CODE    0BA6H     0018H     UNIT         ?PR?_LCD_WRITEDATA_16?ST7735_TFT
-            CODE    0BBEH     0012H     UNIT         ?PR?_LCD_WRITEDATA?ST7735_TFT
-            CODE    0BD0H     000EH     UNIT         ?PR?RESET?ST7735_TFT
-            CODE    0BDEH     000CH     UNIT         ?C_C51STARTUP
-            CODE    0BEAH     000AH     UNIT         ?PR?_LCD_WRITEINDEX?ST7735_TFT
+            CODE    09AEH     00BDH     UNIT         ?PR?_FILLRECTANGLE?ST7735_TFT
+            CODE    0A6BH     0054H     UNIT         ?PR?MAIN?ST7735_TFT
+            CODE    0ABFH     003DH     UNIT         ?PR?_LCD_SETREGION?ST7735_TFT
+            CODE    0AFCH     003CH     UNIT         ?PR?_LCD_CLEAR?ST7735_TFT
+            CODE    0B38H     0037H     UNIT         ?PR?_FILLPOINT?ST7735_TFT
+            CODE    0B6FH     0022H     UNIT         ?PR?_SPI_WRITEDATA?ST7735_TFT
+            CODE    0B91H     0020H     UNIT         ?PR?_DELAY?ST7735_TFT
+            CODE    0BB1H     0018H     UNIT         ?PR?_LCD_WRITEDATA_16?ST7735_TFT
+            CODE    0BC9H     0012H     UNIT         ?PR?_LCD_WRITEDATA?ST7735_TFT
+            CODE    0BDBH     000EH     UNIT         ?PR?RESET?ST7735_TFT
+            CODE    0BE9H     000CH     UNIT         ?C_C51STARTUP
+            CODE    0BF5H     000AH     UNIT         ?PR?_LCD_WRITEINDEX?ST7735_TFT
 
 
 
@@ -56,12 +57,13 @@ SEGMENT                                    DATA_GROUP
   +--> ?PR?LCD_INITIAL?ST7735_TFT
   +--> ?PR?_LCD_CLEAR?ST7735_TFT
   +--> ?PR?_FILLRECTANGLE?ST7735_TFT
+  +--> ?PR?_FILLPOINT?ST7735_TFT
   +--> ?PR?_DELAY?ST7735_TFT
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  04/16/2019  18:53:36  PAGE 2
+
+
 
 ?PR?LCD_INITIAL?ST7735_TFT               -----    -----
-BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  04/16/2019  18:17:33  PAGE 2
-
-
   +--> ?PR?RESET?ST7735_TFT
   +--> ?PR?_LCD_WRITEINDEX?ST7735_TFT
   +--> ?PR?_DELAY?ST7735_TFT
@@ -73,7 +75,7 @@ SEGMENT                                    DATA_GROUP
 ?PR?_LCD_WRITEINDEX?ST7735_TFT           -----    -----
   +--> ?PR?_SPI_WRITEDATA?ST7735_TFT
 
-?PR?_LCD_WRITEDATA?ST7735_TFT            001AH    0001H
+?PR?_LCD_WRITEDATA?ST7735_TFT            0016H    0001H
   +--> ?PR?_LCD_WRITEINDEX?ST7735_TFT
   +--> ?PR?_SPI_WRITEDATA?ST7735_TFT
 
@@ -81,14 +83,18 @@ SEGMENT                                    DATA_GROUP
   +--> ?PR?_LCD_SETREGION?ST7735_TFT
   +--> ?PR?_LCD_WRITEDATA_16?ST7735_TFT
 
-?PR?_LCD_SETREGION?ST7735_TFT            0012H    0008H
+?PR?_LCD_SETREGION?ST7735_TFT            000EH    0008H
   +--> ?PR?_LCD_WRITEDATA?ST7735_TFT
   +--> ?PR?_LCD_WRITEINDEX?ST7735_TFT
 
-?PR?_LCD_WRITEDATA_16?ST7735_TFT         0012H    0001H
+?PR?_LCD_WRITEDATA_16?ST7735_TFT         000EH    0001H
   +--> ?PR?_SPI_WRITEDATA?ST7735_TFT
 
-?PR?_FILLRECTANGLE?ST7735_TFT            0008H    000AH
+?PR?_FILLRECTANGLE?ST7735_TFT            0008H    0006H
+  +--> ?PR?_LCD_SETREGION?ST7735_TFT
+  +--> ?PR?_LCD_WRITEDATA_16?ST7735_TFT
+
+?PR?_FILLPOINT?ST7735_TFT                0008H    0003H
   +--> ?PR?_LCD_SETREGION?ST7735_TFT
   +--> ?PR?_LCD_WRITEDATA_16?ST7735_TFT
 
@@ -101,111 +107,112 @@ SYMBOL TABLE OF MODULE:  .\Objects\Lcd_ST7735 (ST7735_TFT)
 
   -------         MODULE        ST7735_TFT
   C:0000H         SYMBOL        _ICE_DUMMY_
-  C:0BEAH         PUBLIC        _Lcd_WriteIndex
-  C:0BC3H         PUBLIC        _Lcd_WriteData
+  C:0BF5H         PUBLIC        _Lcd_WriteIndex
+  C:0BCEH         PUBLIC        _Lcd_WriteData
   D:0090H         PUBLIC        P1
   C:0800H         PUBLIC        lcd_initial
-  C:0BD0H         PUBLIC        Reset
-  C:0AEBH         PUBLIC        _Lcd_SetRegion
-  C:0B86H         PUBLIC        _delay
-  C:0B28H         PUBLIC        _LCD_Clear
+  C:0BDBH         PUBLIC        Reset
+  C:0ABFH         PUBLIC        _Lcd_SetRegion
+  C:0B91H         PUBLIC        _delay
+  C:0AFCH         PUBLIC        _LCD_Clear
   B:0090H.2       PUBLIC        reset
-  C:0A8BH         PUBLIC        main
+  C:0A6BH         PUBLIC        main
+  C:0B38H         PUBLIC        _fillPoint
   B:0090H.1       PUBLIC        sda
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  04/16/2019  18:53:36  PAGE 3
+
+
   B:0090H.0       PUBLIC        scl
   C:09AEH         PUBLIC        _fillRectangle
-  C:0BA6H         PUBLIC        _Lcd_WriteData_16
+  C:0BB1H         PUBLIC        _Lcd_WriteData_16
   B:0090H.5       PUBLIC        bl
   B:0090H.4       PUBLIC        cs
-  C:0B64H         PUBLIC        _SPI_WriteData
+  C:0B6FH         PUBLIC        _SPI_WriteData
   B:0090H.3       PUBLIC        rs
-BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  04/16/2019  18:17:33  PAGE 3
-
-
   -------         PROC          _DELAY
   D:0006H         SYMBOL        time
   -------         DO            
   D:0004H         SYMBOL        i
   D:0002H         SYMBOL        j
   -------         ENDDO         
-  C:0B86H         LINE#         81
-  C:0B86H         LINE#         82
-  C:0B86H         LINE#         84
-  C:0B90H         LINE#         85
-  C:0BA5H         LINE#         86
+  C:0B91H         LINE#         81
+  C:0B91H         LINE#         82
+  C:0B91H         LINE#         84
+  C:0B9BH         LINE#         85
+  C:0BB0H         LINE#         86
   -------         ENDPROC       _DELAY
   -------         PROC          _SPI_WRITEDATA
   D:0007H         SYMBOL        Data
   -------         DO            
   D:0006H         SYMBOL        i
   -------         ENDDO         
-  C:0B64H         LINE#         89
-  C:0B64H         LINE#         90
-  C:0B64H         LINE#         91
-  C:0B64H         LINE#         92
-  C:0B70H         LINE#         93
-  C:0B70H         LINE#         94
-  C:0B74H         LINE#         95
-  C:0B78H         LINE#         96
-  C:0B7AH         LINE#         97
-  C:0B7CH         LINE#         98
-  C:0B7EH         LINE#         99
-  C:0B82H         LINE#         100
-  C:0B85H         LINE#         101
+  C:0B6FH         LINE#         89
+  C:0B6FH         LINE#         90
+  C:0B6FH         LINE#         91
+  C:0B6FH         LINE#         92
+  C:0B7BH         LINE#         93
+  C:0B7BH         LINE#         94
+  C:0B7FH         LINE#         95
+  C:0B83H         LINE#         96
+  C:0B85H         LINE#         97
+  C:0B87H         LINE#         98
+  C:0B89H         LINE#         99
+  C:0B8DH         LINE#         100
+  C:0B90H         LINE#         101
   -------         ENDPROC       _SPI_WRITEDATA
   -------         PROC          _LCD_WRITEINDEX
   D:0007H         SYMBOL        Data
-  C:0BEAH         LINE#         103
-  C:0BEAH         LINE#         104
-  C:0BEAH         LINE#         106
-  C:0BECH         LINE#         107
-  C:0BEEH         LINE#         108
-  C:0BF1H         LINE#         109
-  C:0BF3H         LINE#         110
+  C:0BF5H         LINE#         103
+  C:0BF5H         LINE#         104
+  C:0BF5H         LINE#         106
+  C:0BF7H         LINE#         107
+  C:0BF9H         LINE#         108
+  C:0BFCH         LINE#         109
+  C:0BFEH         LINE#         110
   -------         ENDPROC       _LCD_WRITEINDEX
-  C:0BBEH         SYMBOL        L?0046
-  -------         PROC          L?0045
-  -------         ENDPROC       L?0045
-  C:0BBEH         SYMBOL        L?0046
+  C:0BC9H         SYMBOL        L?0048
+  -------         PROC          L?0047
+  -------         ENDPROC       L?0047
+  C:0BC9H         SYMBOL        L?0048
   -------         PROC          _LCD_WRITEDATA
   D:0007H         SYMBOL        Data
   -------         DO            
-  D:001AH         SYMBOL        i
+  D:0016H         SYMBOL        i
   -------         ENDDO         
-  C:0BC3H         LINE#         112
-  C:0BC3H         LINE#         113
-  C:0BC3H         LINE#         114
-  C:0BC6H         LINE#         115
-  C:0BC8H         LINE#         116
-  C:0BCAH         LINE#         117
-  C:0BCDH         LINE#         118
-BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  04/16/2019  18:17:33  PAGE 4
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  04/16/2019  18:53:36  PAGE 4
 
 
-  C:0BCFH         LINE#         119
+  C:0BCEH         LINE#         112
+  C:0BCEH         LINE#         113
+  C:0BCEH         LINE#         114
+  C:0BD1H         LINE#         115
+  C:0BD3H         LINE#         116
+  C:0BD5H         LINE#         117
+  C:0BD8H         LINE#         118
+  C:0BDAH         LINE#         119
   -------         ENDPROC       _LCD_WRITEDATA
   -------         PROC          _LCD_WRITEDATA_16
   D:0004H         SYMBOL        Data
   -------         DO            
-  D:0012H         SYMBOL        i
+  D:000EH         SYMBOL        i
   -------         ENDDO         
-  C:0BA6H         LINE#         121
-  C:0BAAH         LINE#         122
-  C:0BAAH         LINE#         123
-  C:0BADH         LINE#         124
-  C:0BAFH         LINE#         125
-  C:0BB1H         LINE#         126
-  C:0BB6H         LINE#         127
-  C:0BBBH         LINE#         128
-  C:0BBDH         LINE#         130
+  C:0BB1H         LINE#         121
+  C:0BB5H         LINE#         122
+  C:0BB5H         LINE#         123
+  C:0BB8H         LINE#         124
+  C:0BBAH         LINE#         125
+  C:0BBCH         LINE#         126
+  C:0BC1H         LINE#         127
+  C:0BC6H         LINE#         128
+  C:0BC8H         LINE#         130
   -------         ENDPROC       _LCD_WRITEDATA_16
   -------         PROC          RESET
-  C:0BD0H         LINE#         132
-  C:0BD0H         LINE#         133
-  C:0BD0H         LINE#         134
-  C:0BD2H         LINE#         135
-  C:0BD9H         LINE#         136
-  C:0BDBH         LINE#         137
+  C:0BDBH         LINE#         132
+  C:0BDBH         LINE#         133
+  C:0BDBH         LINE#         134
+  C:0BDDH         LINE#         135
+  C:0BE4H         LINE#         136
+  C:0BE6H         LINE#         137
   -------         ENDPROC       RESET
   -------         PROC          LCD_INITIAL
   C:0800H         LINE#         141
@@ -232,6 +239,9 @@ SYMBOL TABLE OF MODULE:  .\Objects\Lcd_ST7735 (ST7735_TFT)
   C:0850H         LINE#         169
   C:0855H         LINE#         172
   C:085AH         LINE#         173
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  04/16/2019  18:53:36  PAGE 5
+
+
   C:085FH         LINE#         174
   C:0864H         LINE#         175
   C:0869H         LINE#         176
@@ -239,9 +249,6 @@ SYMBOL TABLE OF MODULE:  .\Objects\Lcd_ST7735 (ST7735_TFT)
   C:0873H         LINE#         179
   C:0878H         LINE#         180
   C:087DH         LINE#         181
-BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  04/16/2019  18:17:33  PAGE 5
-
-
   C:0882H         LINE#         183
   C:0887H         LINE#         184
   C:088CH         LINE#         185
@@ -292,6 +299,9 @@ SYMBOL TABLE OF MODULE:  .\Objects\Lcd_ST7735 (ST7735_TFT)
   C:096DH         LINE#         236
   C:0972H         LINE#         237
   C:0977H         LINE#         239
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  04/16/2019  18:53:36  PAGE 6
+
+
   C:097CH         LINE#         240
   C:0981H         LINE#         241
   C:0986H         LINE#         242
@@ -299,9 +309,6 @@ SYMBOL TABLE OF MODULE:  .\Objects\Lcd_ST7735 (ST7735_TFT)
   C:0990H         LINE#         245
   C:0992H         LINE#         246
   C:0995H         LINE#         247
-BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  04/16/2019  18:17:33  PAGE 6
-
-
   C:099AH         LINE#         248
   C:099FH         LINE#         250
   C:09A4H         LINE#         251
@@ -311,20 +318,20 @@ SYMBOL TABLE OF MODULE:  .\Objects\Lcd_ST7735 (ST7735_TFT)
   D:0082H         SYMBOL        x_start
   D:0004H         SYMBOL        y_start
   D:0002H         SYMBOL        x_end
-  D:0018H         SYMBOL        y_end
-  C:0AEBH         LINE#         263
-  C:0AEDH         LINE#         264
-  C:0AEDH         LINE#         265
-  C:0AEFH         LINE#         266
-  C:0AF2H         LINE#         267
-  C:0AFBH         LINE#         268
-  C:0B00H         LINE#         269
-  C:0B07H         LINE#         271
-  C:0B0CH         LINE#         272
-  C:0B11H         LINE#         273
-  C:0B17H         LINE#         274
-  C:0B1CH         LINE#         275
-  C:0B23H         LINE#         277
+  D:0014H         SYMBOL        y_end
+  C:0ABFH         LINE#         263
+  C:0AC1H         LINE#         264
+  C:0AC1H         LINE#         265
+  C:0AC3H         LINE#         266
+  C:0AC6H         LINE#         267
+  C:0ACFH         LINE#         268
+  C:0AD4H         LINE#         269
+  C:0ADBH         LINE#         271
+  C:0AE0H         LINE#         272
+  C:0AE5H         LINE#         273
+  C:0AEBH         LINE#         274
+  C:0AF0H         LINE#         275
+  C:0AF7H         LINE#         277
   -------         ENDPROC       _LCD_SETREGION
   -------         PROC          _LCD_CLEAR
   D:0008H         SYMBOL        Color
@@ -332,60 +339,74 @@ SYMBOL TABLE OF MODULE:  .\Objects\Lcd_ST7735 (ST7735_TFT)
   D:0003H         SYMBOL        i
   D:0002H         SYMBOL        j
   -------         ENDDO         
-  C:0B28H         LINE#         282
-  C:0B2CH         LINE#         283
-  C:0B2CH         LINE#         285
-  C:0B3EH         LINE#         286
-  C:0B4AH         LINE#         287
-  C:0B4AH         LINE#         288
-  C:0B56H         LINE#         289
-  C:0B56H         LINE#         290
-  C:0B5DH         LINE#         291
-  C:0B60H         LINE#         292
-  C:0B63H         LINE#         293
+  C:0AFCH         LINE#         282
+  C:0B00H         LINE#         283
+  C:0B00H         LINE#         285
+  C:0B12H         LINE#         286
+  C:0B1EH         LINE#         287
+  C:0B1EH         LINE#         288
+  C:0B2AH         LINE#         289
+  C:0B2AH         LINE#         290
+  C:0B31H         LINE#         291
+  C:0B34H         LINE#         292
+  C:0B37H         LINE#         293
   -------         ENDPROC       _LCD_CLEAR
   -------         PROC          _FILLRECTANGLE
   D:0008H         SYMBOL        x
-  D:0082H         SYMBOL        y
-  D:000CH         SYMBOL        w
-  D:000EH         SYMBOL        h
-  D:0010H         SYMBOL        color
+  D:0009H         SYMBOL        y
+  D:000AH         SYMBOL        w
+  D:000BH         SYMBOL        h
+  D:000CH         SYMBOL        color
   C:09AEH         LINE#         5
-  C:09BAH         LINE#         6
-  C:09D6H         LINE#         8
-  C:09EFH         LINE#         9
-  C:09FAH         LINE#         10
-  C:0A13H         LINE#         11
-  C:0A1EH         LINE#         12
-  C:0A4DH         LINE#         13
-  C:0A5EH         LINE#         14
-BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  04/16/2019  18:17:33  PAGE 7
+  C:09B4H         LINE#         6
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  04/16/2019  18:53:36  PAGE 7
 
 
-  C:0A6FH         LINE#         15
-  C:0A76H         LINE#         16
-  C:0A80H         LINE#         17
-  C:0A8AH         LINE#         18
+  C:09D2H         LINE#         8
+  C:09E9H         LINE#         9
+  C:09EFH         LINE#         10
+  C:0A09H         LINE#         11
+  C:0A0FH         LINE#         12
+  C:0A3FH         LINE#         13
+  C:0A4DH         LINE#         14
+  C:0A5BH         LINE#         15
+  C:0A62H         LINE#         16
+  C:0A66H         LINE#         17
+  C:0A6AH         LINE#         18
   -------         ENDPROC       _FILLRECTANGLE
+  -------         PROC          _FILLPOINT
+  D:0008H         SYMBOL        x
+  D:0001H         SYMBOL        y
+  D:0009H         SYMBOL        color
+  -------         DO            
+  D:0003H         SYMBOL        i
+  -------         ENDDO         
+  C:0B38H         LINE#         20
+  C:0B40H         LINE#         22
+  C:0B58H         LINE#         23
+  C:0B64H         LINE#         24
+  C:0B6EH         LINE#         25
+  -------         ENDPROC       _FILLPOINT
   -------         PROC          MAIN
-  C:0A8BH         LINE#         20
-  C:0A8BH         LINE#         21
-  C:0A8BH         LINE#         25
-  C:0A8EH         LINE#         26
-  C:0A90H         LINE#         27
-  C:0A96H         LINE#         28
-  C:0AB1H         LINE#         29
-  C:0ACAH         LINE#         30
-  C:0AE2H         LINE#         33
-  C:0AE2H         LINE#         34
-  C:0AE2H         LINE#         35
-  C:0AE9H         LINE#         36
+  C:0A6BH         LINE#         27
+  C:0A6BH         LINE#         28
+  C:0A6BH         LINE#         32
+  C:0A6EH         LINE#         33
+  C:0A70H         LINE#         34
+  C:0A76H         LINE#         35
+  C:0A88H         LINE#         36
+  C:0A9AH         LINE#         37
+  C:0AABH         LINE#         38
+  C:0AB6H         LINE#         41
+  C:0AB6H         LINE#         42
+  C:0AB6H         LINE#         43
+  C:0ABDH         LINE#         44
   -------         ENDPROC       MAIN
   -------         ENDMOD        ST7735_TFT
 
 ******************************************************************************
-* RESTRICTED VERSION WITH 0800H BYTE CODE SIZE LIMIT; USED: 03E8H BYTE (48%) *
+* RESTRICTED VERSION WITH 0800H BYTE CODE SIZE LIMIT; USED: 03F3H BYTE (49%) *
 ******************************************************************************
 
-Program Size: data=28.0 xdata=0 code=1015
+Program Size: data=24.0 xdata=0 code=1026
 LINK/LOCATE RUN COMPLETE.  0 WARNING(S),  0 ERROR(S)
