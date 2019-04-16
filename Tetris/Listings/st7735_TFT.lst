@@ -1,4 +1,4 @@
-C51 COMPILER V9.59.0.0   ST7735_TFT                                                        04/16/2019 18:53:30 PAGE 1   
+C51 COMPILER V9.59.0.0   ST7735_TFT                                                        04/16/2019 21:07:48 PAGE 1   
 
 
 C51 COMPILER V9.59.0.0, COMPILATION OF MODULE ST7735_TFT
@@ -12,59 +12,83 @@ line level    source
    2          #define TFT_Width       128
    3          #define TFT_Height      160
    4          
-   5          void fillRectangle(unsigned char x, unsigned char y, unsigned char w, unsigned char h, unsigned int color)
+   5          unsigned int xdata Area[20];
+   6          
+   7          void fillRectangle(unsigned char x, unsigned char y, unsigned char w, unsigned char h, unsigned int color)
              -{
-   6   1        if((x >= TFT_Width) || (y >= TFT_Height))
-   7   1          return;
-   8   1        if((x + w - 1) >= TFT_Width)
-   9   1          w = TFT_Width  - x;
-  10   1        if((y + h - 1) >= TFT_Height)
-  11   1          h = TFT_Height - y;
-  12   1        Lcd_SetRegion(x, y, x+w-1, y+h-1);
-  13   1        for(y = h; y > 0; y--) {
-  14   2          for(x = w; x > 0; x--) {
-  15   3            Lcd_WriteData_16(color);
-  16   3          }
-  17   2        }
-  18   1      }
-  19          
-  20          void fillPoint(unsigned char x, unsigned char y, unsigned int color ) { // 8X8 square
-  21   1        unsigned char i;
-  22   1        Lcd_SetRegion(x, y, x+7, y+7);
-  23   1        for(i = 64; i > 0; i-- )
-  24   1          Lcd_WriteData_16(color);
-  25   1      }
-  26          
-  27          void main(void)
-  28          {
-  29   1      #ifdef MCU_STC12
-                P3M1 &= ~(1<<2),  P3M0 |=  (1<<2);  //P3.2 set as push-pull output mode
-              #endif
-  32   1        lcd_initial(); //液晶屏初始化
-  33   1        bl=1;//背光采用IO控制，也可以直接接到高电平常亮
-  34   1        LCD_Clear(BLACK);   //黑色
-  35   1        fillRectangle(50,50,60,60,RED);
-  36   1        fillRectangle(20,0,8,8,RED);
-  37   1        fillRectangle(0,0,8,8,RED);
-  38   1        fillPoint(0,40,GREEN);
-  39   1      
-  40   1      
-  41   1        while(1)
-  42   1        {
-  43   2        delay(500);
-  44   2         }
-  45   1      
-  46   1      }
+   8   1        if((x >= TFT_Width) || (y >= TFT_Height))
+   9   1          return;
+  10   1        if((x + w - 1) >= TFT_Width)
+  11   1          w = TFT_Width  - x;
+  12   1        if((y + h - 1) >= TFT_Height)
+  13   1          h = TFT_Height - y;
+  14   1        Lcd_SetRegion(x, y, x+w-1, y+h-1);
+  15   1        for(y = h; y > 0; y--) {
+  16   2          for(x = w; x > 0; x--) {
+  17   3            Lcd_WriteData_16(color);
+  18   3          }
+  19   2        }
+  20   1      }
+  21          // 8X8 square
+  22          void fillPoint(unsigned char x, unsigned char y, unsigned int color ) {
+  23   1        unsigned char i;
+  24   1        x *= 8;
+  25   1        y *= 8;
+  26   1        Lcd_SetRegion(x, y, x+7, y+7);
+  27   1        for(i = 64; i > 0; i-- )
+  28   1          Lcd_WriteData_16(color);
+  29   1      }
+  30          //显示俄罗斯方块
+  31          void print_Tetris(unsigned char x, unsigned char y, unsigned int cube, unsigned int color){
+  32   1        unsigned char row, i,bit_row,j;
+  33   1        for(i = 0; i < 4; i++){               //4行
+  34   2          row = cube & 0x0f;                  //取出低4位保存在row中
+  35   2          cube >>= 4;
+  36   2          bit_row = 0x08;
+  37   2          for(j=0; j < 4; j++){
+  38   3            if(row & bit_row)                 //按位判断，显示一行
+  39   3              fillPoint(x+j,y+3-i,color);     //先显示数据的低4位，y值反而最大
+  40   3            bit_row >>= 1;
+  41   3          }
+  42   2        }
+  43   1      }
+  44          
+  45          void dataStorage(unsigned int cube){
+  46   1        unsigned int row_1,row_2,row_3,row_4;
+  47   1        row_4 = cube & 0x0f;
+  48   1        cube >>= 4;
+  49   1        row_3 = cube & 0x0f;
+  50   1        cube >>= 4;
+  51   1        row_2 = cube & 0x0f;
+  52   1        cube >>= 4;
+  53   1        row_1 = cube & 0x0f;
+C51 COMPILER V9.59.0.0   ST7735_TFT                                                        04/16/2019 21:07:48 PAGE 2   
+
+  54   1      
+  55   1      }
+  56          void main(void)
+  57          {
+  58   1        lcd_initial(); //液晶屏初始化
+  59   1        bl=1;//背光采用IO控制，也可以直接接到高电平常亮
+  60   1        LCD_Clear(BLACK);   //黑色
+  61   1        fillPoint(0,3,GREEN);
+  62   1        print_Tetris(8,8,0x88c0,YELLOW);
+  63   1      
+  64   1      
+  65   1        while(1)
+  66   1        {
+  67   2        delay(500);
+  68   2         }
+  69   1      
+  70   1      }
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =   1011    ----
+   CODE SIZE        =   1165    ----
    CONSTANT SIZE    =   ----    ----
-   XDATA SIZE       =   ----    ----
+   XDATA SIZE       =     40    ----
    PDATA SIZE       =   ----    ----
-C51 COMPILER V9.59.0.0   ST7735_TFT                                                        04/16/2019 18:53:30 PAGE 2   
-
-   DATA SIZE        =   ----      21
+   DATA SIZE        =   ----      39
    IDATA SIZE       =   ----    ----
    BIT SIZE         =   ----    ----
 END OF MODULE INFORMATION.

@@ -2,6 +2,9 @@
 #define TFT_Width       128
 #define TFT_Height      160
 
+unsigned int xdata Area[20];
+unsigned int xdata *data pArea=Area;
+
 void fillRectangle(unsigned char x, unsigned char y, unsigned char w, unsigned char h, unsigned int color){
   if((x >= TFT_Width) || (y >= TFT_Height))
     return;
@@ -16,26 +19,49 @@ void fillRectangle(unsigned char x, unsigned char y, unsigned char w, unsigned c
     }
   }
 }
-
-void fillPoint(unsigned char x, unsigned char y, unsigned int color ) { // 8X8 square
+// 8X8 square
+void fillPoint(unsigned char x, unsigned char y, unsigned int color ) {
   unsigned char i;
+  x *= 8;
+  y *= 8;
   Lcd_SetRegion(x, y, x+7, y+7);
   for(i = 64; i > 0; i-- )
     Lcd_WriteData_16(color);
 }
+//显示俄罗斯方块
+void print_Tetris(unsigned char x, unsigned char y, unsigned int cube, unsigned int color){
+  unsigned char row, i,bit_row,j;
+  for(i = 0; i < 4; i++){               //4行
+    row = cube & 0x0f;                  //取出低4位保存在row中
+    cube >>= 4;
+    bit_row = 0x08;
+    for(j=0; j < 4; j++){
+      if(row & bit_row)                 //按位判断，显示一行
+        fillPoint(x+j,y+3-i,color);     //先显示数据的低4位，y值反而最大
+      bit_row >>= 1;
+    }
+  }
+}
 
+void dataStorage(unsigned int cube){
+  unsigned int row_1,row_2,row_3,row_4;
+
+  row_4 = cube & 0x0f;
+  cube >>= 4;
+  row_3 = cube & 0x0f;
+  cube >>= 4;
+  row_2 = cube & 0x0f;
+  cube >>= 4;
+  row_1 = cube & 0x0f;
+
+}
 void main(void)
 {
-#ifdef MCU_STC12
-  P3M1 &= ~(1<<2),	P3M0 |=  (1<<2);	//P3.2 set as push-pull output mode
-#endif
   lcd_initial(); //液晶屏初始化
   bl=1;//背光采用IO控制，也可以直接接到高电平常亮
   LCD_Clear(BLACK);		//黑色
-  fillRectangle(50,50,60,60,RED);
-  fillRectangle(20,0,8,8,RED);
-	fillRectangle(0,0,8,8,RED);
-  fillPoint(0,40,GREEN);
+  fillPoint(0,3,GREEN);
+  print_Tetris(8,8,0x88c0,YELLOW);
 
 
   while(1)
