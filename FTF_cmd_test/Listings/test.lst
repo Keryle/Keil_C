@@ -1,0 +1,325 @@
+C51 COMPILER V9.59.0.0   TEST                                                              04/16/2019 17:22:42 PAGE 1   
+
+
+C51 COMPILER V9.59.0.0, COMPILATION OF MODULE TEST
+OBJECT MODULE PLACED IN .\Objects\test.obj
+COMPILER INVOKED BY: D:\Program Files (x86)\keil_v5\C51\BIN\C51.EXE test.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND P
+                    -RINT(.\Listings\test.lst) TABS(2) OBJECT(.\Objects\test.obj)
+
+line level    source
+
+   1          //////////////////////////////////////////////////////////////////////////////////
+   2          //本程序只供学习使用，未经作者许可，不得用于其它任何用途
+   3          //测试硬件：STC51
+   4          //1.44寸TFT_ST7735液晶驱动
+   5          //淘宝网站：https://shop73023976.taobao.com/?spm=a1z10.1-c.0.0.8QF1fT
+   6          //我司提供底层技术支持，任何技术问题欢迎随时交流学习
+   7          //手机:18639000975(黄工)
+   8          //QQ：2534656669
+   9          //创建日期:2015/9/10
+  10          //版本：V1.0
+  11          //版权所有，盗版必究。
+  12          //Copyright(C) 中景园电子
+  13          //All rights reserved
+  14          //********************************************************************************
+  15          
+  16          #include<reg51.h>
+  17          #include<absacc.h>
+  18          #include<intrins.h>
+  19          #include<string.h>
+  20          #define uchar unsigned char
+  21          #define uint unsigned int
+  22          
+  23          //测试硬件平台：STC12LE5A60S2(3.3V单片机)
+  24          //主频：12MHZ
+  25          //---------------------------液晶屏接线说明-------------------------------------//
+  26          //接线前请参考液晶屏说明书第10页引脚定义
+  27          sbit bl        =P1^5;//接模块BL引脚，背光可以采用IO控制或者PWM控制，也可以直接接到高电平常亮
+  28          sbit scl       =P1^0;//接模块CLK引脚,接裸屏Pin9_SCL
+  29          sbit sda       =P1^1;//接模块DIN/MOSI引脚，接裸屏Pin8_SDA
+  30          sbit rs        =P1^3;//接模块D/C引脚，接裸屏Pin7_A0
+  31          sbit cs        =P1^4;//接模块CE引脚，接裸屏Pin12_CS
+  32          sbit reset     =P1^2;//接模块RST引脚，接裸屏Pin6_RES
+  33          //---------------------------End of液晶屏接线---------------------------------//
+  34          
+  35          
+  36          //单片机IO推挽输出设置定义
+  37          #define MCU_STC12//如果您使用的单片机不是STC12系列(如STC89C52)请屏蔽此宏定义
+  38          #ifdef MCU_STC12
+  39          sfr P3M1  = 0xB1; //P3M1.n,P3M0.n   =00--->Standard,  01--->push-pull
+  40          sfr P3M0  = 0xB2; //          =10--->pure input,  11--->open drain
+  41          #endif
+  42          
+  43          //定义常用颜色
+  44          #define RED     0xf800
+  45          #define GREEN   0x07e0
+  46          #define BLUE    0x001f
+  47          #define WHITE   0xffff
+  48          #define BLACK   0x0000
+  49          #define YELLOW  0xFFE0
+  50          #define GRAY0   0xEF7D
+  51          #define GRAY1   0x8410
+  52          #define GRAY2   0x4208
+  53          
+  54          void delay(uint time)
+C51 COMPILER V9.59.0.0   TEST                                                              04/16/2019 17:22:42 PAGE 2   
+
+  55          {
+  56   1       uint i,j;
+  57   1        for(i=0;i<time;i++)
+  58   1         for(j=0;j<250;j++);
+  59   1      }
+  60          
+  61          //向SPI总线传输一个8位数据
+  62          void  SPI_WriteData(uchar Data)
+  63          {
+  64   1          unsigned char i=0;
+  65   1        for(i=8;i>0;i--)
+  66   1        {
+  67   2          if(Data&0x80)
+  68   2          sda=1; //输出数据
+  69   2          else sda=0;
+  70   2          scl=0;
+  71   2          scl=1;
+  72   2          Data<<=1;
+  73   2        }
+  74   1      }
+  75          //向液晶屏写一个8位指令
+  76          void  Lcd_WriteIndex(uchar Data)
+  77          {
+  78   1      
+  79   1          cs=0;
+  80   1          rs=0;
+  81   1          SPI_WriteData(Data);
+  82   1          cs=1;
+  83   1      }
+  84          //向液晶屏写一个8位数据
+  85          void  Lcd_WriteData(uchar Data)
+  86          {
+  87   1          unsigned char i=0;
+  88   1          cs=0;
+  89   1          rs=1;
+  90   1          SPI_WriteData(Data);
+  91   1          cs=1;
+  92   1      }
+  93          //向液晶屏写一个16位数据
+  94          void  Lcd_WriteData_16(unsigned int Data)
+  95          {
+  96   1        unsigned char i=0;
+  97   1        cs=0;
+  98   1        rs=1;
+  99   1        SPI_WriteData(Data>>8);   //写入高8位数据
+ 100   1        SPI_WriteData(Data);      //写入低8位数据
+ 101   1        cs=1;
+ 102   1      
+ 103   1      }
+ 104          //LCD复位时序
+ 105          void Reset(void)
+ 106          {
+ 107   1          reset=0;
+ 108   1          delay(100);
+ 109   1          reset=1;
+ 110   1          delay(100);
+ 111   1      }
+ 112          //////////////////////////////////////////////////////////////////////////////////////////////
+ 113          //液晶屏初始化 for S6D02A1
+ 114          void lcd_initial(void)
+ 115          {
+ 116   1        Reset();//Reset before LCD Init.
+C51 COMPILER V9.59.0.0   TEST                                                              04/16/2019 17:22:42 PAGE 3   
+
+ 117   1      
+ 118   1        //LCD Init For 1.44Inch LCD Panel with ST7735R.
+ 119   1        Lcd_WriteIndex(0x11);//Sleep exit
+ 120   1        delay (120);
+ 121   1      
+ 122   1        //ST7735R Frame Rate
+ 123   1        Lcd_WriteIndex(0xB1);
+ 124   1        Lcd_WriteData(0x01);
+ 125   1        Lcd_WriteData(0x2C);
+ 126   1        Lcd_WriteData(0x2D);
+ 127   1      
+ 128   1        Lcd_WriteIndex(0xB2);
+ 129   1        Lcd_WriteData(0x01);
+ 130   1        Lcd_WriteData(0x2C);
+ 131   1        Lcd_WriteData(0x2D);
+ 132   1      
+ 133   1        Lcd_WriteIndex(0xB3);
+ 134   1        Lcd_WriteData(0x01);
+ 135   1        Lcd_WriteData(0x2C);
+ 136   1        Lcd_WriteData(0x2D);
+ 137   1        Lcd_WriteData(0x01);
+ 138   1        Lcd_WriteData(0x2C);
+ 139   1        Lcd_WriteData(0x2D);
+ 140   1      
+ 141   1        Lcd_WriteIndex(0xB4); //Column inversion
+ 142   1        Lcd_WriteData(0x07);
+ 143   1      
+ 144   1        //ST7735R Power Sequence
+ 145   1        Lcd_WriteIndex(0xC0);
+ 146   1        Lcd_WriteData(0xA2);
+ 147   1        Lcd_WriteData(0x02);
+ 148   1        Lcd_WriteData(0x84);
+ 149   1        Lcd_WriteIndex(0xC1);
+ 150   1        Lcd_WriteData(0xC5);
+ 151   1      
+ 152   1        Lcd_WriteIndex(0xC2);
+ 153   1        Lcd_WriteData(0x0A);
+ 154   1        Lcd_WriteData(0x00);
+ 155   1      
+ 156   1        Lcd_WriteIndex(0xC3);
+ 157   1        Lcd_WriteData(0x8A);
+ 158   1        Lcd_WriteData(0x2A);
+ 159   1        Lcd_WriteIndex(0xC4);
+ 160   1        Lcd_WriteData(0x8A);
+ 161   1        Lcd_WriteData(0xEE);
+ 162   1      
+ 163   1        Lcd_WriteIndex(0xC5); //VCOM
+ 164   1        Lcd_WriteData(0x0E);
+ 165   1      
+ 166   1        Lcd_WriteIndex(0x36); //MX, MY, RGB mode
+ 167   1        Lcd_WriteData(0xC0);
+ 168   1      
+ 169   1        //ST7735R Gamma Sequence
+ 170   1        Lcd_WriteIndex(0xe0);
+ 171   1        Lcd_WriteData(0x0f);
+ 172   1        Lcd_WriteData(0x1a);
+ 173   1        Lcd_WriteData(0x0f);
+ 174   1        Lcd_WriteData(0x18);
+ 175   1        Lcd_WriteData(0x2f);
+ 176   1        Lcd_WriteData(0x28);
+ 177   1        Lcd_WriteData(0x20);
+ 178   1        Lcd_WriteData(0x22);
+C51 COMPILER V9.59.0.0   TEST                                                              04/16/2019 17:22:42 PAGE 4   
+
+ 179   1        Lcd_WriteData(0x1f);
+ 180   1        Lcd_WriteData(0x1b);
+ 181   1        Lcd_WriteData(0x23);
+ 182   1        Lcd_WriteData(0x37);
+ 183   1        Lcd_WriteData(0x00);
+ 184   1        Lcd_WriteData(0x07);
+ 185   1        Lcd_WriteData(0x02);
+ 186   1        Lcd_WriteData(0x10);
+ 187   1      
+ 188   1        Lcd_WriteIndex(0xe1);
+ 189   1        Lcd_WriteData(0x0f);
+ 190   1        Lcd_WriteData(0x1b);
+ 191   1        Lcd_WriteData(0x0f);
+ 192   1        Lcd_WriteData(0x17);
+ 193   1        Lcd_WriteData(0x33);
+ 194   1        Lcd_WriteData(0x2c);
+ 195   1        Lcd_WriteData(0x29);
+ 196   1        Lcd_WriteData(0x2e);
+ 197   1        Lcd_WriteData(0x30);
+ 198   1        Lcd_WriteData(0x30);
+ 199   1        Lcd_WriteData(0x39);
+ 200   1        Lcd_WriteData(0x3f);
+ 201   1        Lcd_WriteData(0x00);
+ 202   1        Lcd_WriteData(0x07);
+ 203   1        Lcd_WriteData(0x03);
+ 204   1        Lcd_WriteData(0x10);
+ 205   1      
+ 206   1        Lcd_WriteIndex(0x2a);
+ 207   1        Lcd_WriteData(0x00);
+ 208   1        Lcd_WriteData(0x00+2);
+ 209   1        Lcd_WriteData(0x00);
+ 210   1        Lcd_WriteData(0x80+2);
+ 211   1      
+ 212   1        Lcd_WriteIndex(0x2b);
+ 213   1        Lcd_WriteData(0x00);
+ 214   1        Lcd_WriteData(0x00+3);
+ 215   1        Lcd_WriteData(0x00);
+ 216   1        Lcd_WriteData(0x80+3);
+ 217   1      
+ 218   1        Lcd_WriteIndex(0xF0); //Enable test command
+ 219   1        Lcd_WriteData(0x01);
+ 220   1        Lcd_WriteIndex(0xF6); //Disable ram power save mode
+ 221   1        Lcd_WriteData(0x00);
+ 222   1      
+ 223   1        Lcd_WriteIndex(0x3A); //65k mode
+ 224   1        Lcd_WriteData(0x05);
+ 225   1      
+ 226   1      
+ 227   1        Lcd_WriteIndex(0x29);//Display on
+ 228   1      
+ 229   1      }
+ 230          /*************************************************
+ 231          函数名：LCD_Set_Region
+ 232          功能：设置lcd显示区域，在此区域写点数据自动换行
+ 233          入口参数：xy起点和终点
+ 234          返回值：无
+ 235          *************************************************/
+ 236          void Lcd_SetRegion(unsigned int x_start,unsigned int y_start,unsigned int x_end,unsigned int y_end)
+ 237          {
+ 238   1        Lcd_WriteIndex(0x2a);
+ 239   1        Lcd_WriteData(0x01);
+ 240   1        Lcd_WriteData(x_start+2);
+C51 COMPILER V9.59.0.0   TEST                                                              04/16/2019 17:22:42 PAGE 5   
+
+ 241   1        Lcd_WriteData(0x01);
+ 242   1        Lcd_WriteData(x_end+2);
+ 243   1      
+ 244   1        Lcd_WriteIndex(0x2b);
+ 245   1        Lcd_WriteData(0x02);
+ 246   1        Lcd_WriteData(y_start+1);
+ 247   1        Lcd_WriteData(0x02);
+ 248   1        Lcd_WriteData(y_end+1);
+ 249   1      
+ 250   1        Lcd_WriteIndex(0x2c);
+ 251   1      
+ 252   1      }
+ 253          
+ 254          //全屏填充函数
+ 255          void LCD_Clear(unsigned int Color)
+ 256          {
+ 257   1        uchar i,j;
+ 258   1        Lcd_SetRegion(0,0,127,159);
+ 259   1        for (i=0;i<160;i++)
+ 260   1        {
+ 261   2            for (j=0;j<128;j++)
+ 262   2          {
+ 263   3                Lcd_WriteData_16(Color);
+ 264   3          }
+ 265   2        }
+ 266   1      }
+ 267          
+ 268          
+ 269          
+ 270          void main(void)
+ 271          {
+ 272   1      #ifdef MCU_STC12
+ 273   1        P3M1 &= ~(1<<2),  P3M0 |=  (1<<2);  //P3.2 set as push-pull output mode
+ 274   1      #endif
+ 275   1        lcd_initial(); //液晶屏初始化
+ 276   1        bl=1;//背光采用IO控制，也可以直接接到高电平常亮
+ 277   1        while(1)
+ 278   1        {
+ 279   2        LCD_Clear(RED);     //红色
+ 280   2        delay(500);
+ 281   2        LCD_Clear(GREEN);   //绿色
+ 282   2        delay(500);
+ 283   2        LCD_Clear(BLUE);    //蓝色
+ 284   2        delay(500);
+ 285   2        LCD_Clear(BLACK);   //黑色
+ 286   2        delay(500);
+ 287   2        LCD_Clear(WHITE);   //白色
+ 288   2        delay(500);
+ 289   2         }
+ 290   1      
+ 291   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    748    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----      12
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+C51 COMPILER V9.59.0.0   TEST                                                              04/16/2019 17:22:42 PAGE 6   
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
