@@ -4,6 +4,7 @@
 
 unsigned int xdata Area[20];
 unsigned int xdata *data pArea=Area;
+pArea += 4;
 
 void fillRectangle(unsigned char x, unsigned char y, unsigned char w, unsigned char h, unsigned int color){
   if((x >= TFT_Width) || (y >= TFT_Height))
@@ -43,9 +44,9 @@ void print_Tetris(unsigned char x, unsigned char y, unsigned int cube, unsigned 
   }
 }
 
-void dataStorage(unsigned int cube){
+//游戏界面12X20，用一个16位数据保存一行，高4位无效，共20行，20个数据
+void dataStorageDwon(unsigned int cube){
   unsigned int row_1,row_2,row_3,row_4;
-
   row_4 = cube & 0x0f;
   cube >>= 4;
   row_3 = cube & 0x0f;
@@ -53,6 +54,24 @@ void dataStorage(unsigned int cube){
   row_2 = cube & 0x0f;
   cube >>= 4;
   row_1 = cube & 0x0f;
+  row_1 <<= 4;
+  row_2 <<= 4;
+  row_3 <<= 4;
+  row_4 <<= 4;             //居中
+
+  if((*pArea & row_4) || (pArea > 19)){
+    *pArea |= row_4;
+    pArea--;
+    *pArea |= row_3;
+    pArea--;
+    *pArea |= row_2;
+    pArea--;
+    *pArea |= row_1;
+    pArea += 3;
+  }
+  dataStorge();
+  pArea++;
+  dataStorageWrite();
 
 }
 void main(void)
