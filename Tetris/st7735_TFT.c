@@ -2,9 +2,9 @@
 #define TFT_Width       128
 #define TFT_Height      160
 
-unsigned int xdata Area[20];
+unsigned int xdata Area[20],groundx[20];
 unsigned int xdata *data pArea=Area;
-unsigned char data trackSquare[6];
+unsigned char data trackSquare[6],ground[6];
 unsigned char data tetris[5] = {0x00,0x0c,0x08,0x08,0};       //低四位存行数据
 unsigned char square_x = 4, square_y = 0;
 
@@ -34,6 +34,7 @@ void fillPoint(unsigned char x, unsigned char y, unsigned int color ) {
 //显示俄罗斯方块
 void print_Tetris(unsigned char x, unsigned char y, unsigned int cube, unsigned int color){
   unsigned char row, i,bit_row,j;
+  x += 1;                               //向右平移两列
   for(i = 0; i < 4; i++){               //4行
     row = cube & 0x0f;                  //取出低4位保存在row中
     cube >>= 4;
@@ -45,15 +46,26 @@ void print_Tetris(unsigned char x, unsigned char y, unsigned int cube, unsigned 
     }
   }
 }
-
+//数据储存结构：一个16位int类型代表一行
+//高位为1代表左墙壁，低三位置1代表右墙壁
+/*  墙    1  2  3  4  5  6  7  8  9  10 11   墙14
+    11 |  x  x  x  x  x  x  x  x  x  x  x  | 111
+*/
 void trackSquare_Read(unsigned char x, unsigned char y){
   unsigned int xdata *p = Area;
   unsigned char i;
   p += y;           //数据开始行
   for(i = 0; i < 6; i++){
-    trackSquare[i] = (*p >> (5-x)) & 0xc0; //取出6位数据，右移 11-6-x = 5-x位，再屏蔽高两位
+    trackSquare[i] = (*p >> (14-6+1-x)) & 0; //取出6位数据
     p++;
   }
+  p = groundx;
+  p += y;           //数据开始行
+  for(i = 0; i < 6; i++){
+    ground[i] = (*p >> (14-6+1-x)); //取出6位数据
+    p++;
+  }
+
 }
 
 void trackSquare_Write(unsigned char x, unsigned char y){
@@ -63,8 +75,8 @@ void trackSquare_Write(unsigned char x, unsigned char y){
   p += y;
   for(i = 0; i < 6; i++ ){
     a = trackSquare[i];
-    a <<= (5-x);
-    *p |= a;
+    a <<= (14-6+1-x);
+    *p = a;
     p++;
   }
 
@@ -76,6 +88,7 @@ unsigned char showTrackSquare_Down(unsigned char x, unsigned char y, unsigned in
   unsigned char data temptrack[6],aa[6];
   unsigned char data *pTrack = trackSquare;
   unsigned char row;
+  x += 1;                                          //游戏界面向右平移2格
   for(i = 0; i < 6; i++)
     temptrack[i] = *pTrack++;
   pTrack = &temptrack[5];
@@ -84,14 +97,15 @@ unsigned char showTrackSquare_Down(unsigned char x, unsigned char y, unsigned in
     row = tetris[i] << 1;
     *pTrack = (*pTrack) | row;             //temptrack区域与俄罗斯方块相或
   }
-  pTrack = &trackSquare[5];                  //指向第5行
-
+  pTrack = &ground[5];                  //指向第5行
+  j = 5;
   for(i = 0; i <= 3; i++){
     row = tetris[i] << 1;
-    if(*pTrack & row || (y == 17))
-    return  1;
-    *pTrack = (*pTrack) | row;             //track区域与俄罗斯方块相或,保存这次移动操作的数据
+  //  if((*pTrack & row) > 0)
+  //  return  1;
+    trackSquare[j] = (*pTrack) | row;             //track区域与俄罗斯方块相或,保存这次移动操作的数据
     pTrack--;
+    j--;
   }
   pTrack = &temptrack[0];
   for(i = 0; i < 6; i++){
@@ -127,6 +141,8 @@ void tetris_Storage(unsigned int cube){
 void main(void)
 {
   unsigned char i;
+  Area[18] = 0xffff;//游戏下边界
+  Area[17] = 0xffff;
   lcd_initial(); //液晶屏初始化
   bl=1;//背光采用IO控制，也可以直接接到高电平常亮
   LCD_Clear(BLACK);		//黑色
@@ -137,12 +153,19 @@ void main(void)
   showTrackSquare_Down(square_x,4,RED);
   trackSquare_Write(square_x,4);
   i = 0;
-  while(1){
+  Area[0] = 0x75a2;
+  trackSquare_Read(11,0);
+  trackSquare_Write(11,0);
+  if(Area[0] == 0x00a2)
+  fillPoint(0,3,GREEN);
+  while(0){
     trackSquare_Read(square_x,5+i);
     showTrackSquare_Down(square_x, 5+i, RED );
-    trackSquare_Write(square_x,5+i);
+  /*  if(showTrackSquare_Down(square_x, 5+i, RED ))
+    break;
+*/    trackSquare_Write(square_x,5+i);
 
-    delay(1500);
+    delay(1000);
     i++;
   }
   while(1)

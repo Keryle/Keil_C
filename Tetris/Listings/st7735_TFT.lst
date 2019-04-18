@@ -1,4 +1,4 @@
-C51 COMPILER V9.59.0.0   ST7735_TFT                                                        04/17/2019 21:35:35 PAGE 1   
+C51 COMPILER V9.59.0.0   ST7735_TFT                                                        04/18/2019 12:06:24 PAGE 1   
 
 
 C51 COMPILER V9.59.0.0, COMPILATION OF MODULE ST7735_TFT
@@ -12,9 +12,9 @@ line level    source
    2          #define TFT_Width       128
    3          #define TFT_Height      160
    4          
-   5          unsigned int xdata Area[20];
+   5          unsigned int xdata Area[20],groundx[20];
    6          unsigned int xdata *data pArea=Area;
-   7          unsigned char data trackSquare[6];
+   7          unsigned char data trackSquare[6],ground[6];
    8          unsigned char data tetris[5] = {0x00,0x0c,0x08,0x08,0};       //低四位存行数据
    9          unsigned char square_x = 4, square_y = 0;
   10          
@@ -45,139 +45,165 @@ line level    source
   34          //显示俄罗斯方块
   35          void print_Tetris(unsigned char x, unsigned char y, unsigned int cube, unsigned int color){
   36   1        unsigned char row, i,bit_row,j;
-  37   1        for(i = 0; i < 4; i++){               //4行
-  38   2          row = cube & 0x0f;                  //取出低4位保存在row中
-  39   2          cube >>= 4;
-  40   2          bit_row = 0x08;
-  41   2          for(j=0; j < 4; j++){
-  42   3            if(row & bit_row)                 //按位判断，显示一行
-  43   3              fillPoint(x+j,y+3-i,color);     //先显示数据的低4位，y值反而最大
-  44   3            bit_row >>= 1;
-  45   3          }
-  46   2        }
-  47   1      }
-  48          
-  49          void trackSquare_Read(unsigned char x, unsigned char y){
-  50   1        unsigned int xdata *p = Area;
-  51   1        unsigned char i;
-  52   1        p += y;           //数据开始行
-  53   1        for(i = 0; i < 6; i++){
-C51 COMPILER V9.59.0.0   ST7735_TFT                                                        04/17/2019 21:35:35 PAGE 2   
+  37   1        x += 1;                               //向右平移两列
+  38   1        for(i = 0; i < 4; i++){               //4行
+  39   2          row = cube & 0x0f;                  //取出低4位保存在row中
+  40   2          cube >>= 4;
+  41   2          bit_row = 0x08;
+  42   2          for(j=0; j < 4; j++){
+  43   3            if(row & bit_row)                 //按位判断，显示一行
+  44   3              fillPoint(x+j,y+3-i,color);     //先显示数据的低4位，y值反而最大
+  45   3            bit_row >>= 1;
+  46   3          }
+  47   2        }
+  48   1      }
+  49          //数据储存结构：一个16位int类型代表一行
+  50          //高位为1代表左墙壁，低三位置1代表右墙壁
+  51          /*  墙    1  2  3  4  5  6  7  8  9  10 11   墙14
+  52              11 |  x  x  x  x  x  x  x  x  x  x  x  | 111
+  53          */
+C51 COMPILER V9.59.0.0   ST7735_TFT                                                        04/18/2019 12:06:24 PAGE 2   
 
-  54   2          trackSquare[i] = (*p >> (5-x)) & 0xc0; //取出6位数据，右移 11-6-x = 5-x位，再屏蔽高两位
-  55   2          p++;
-  56   2        }
-  57   1      }
-  58          
-  59          void trackSquare_Write(unsigned char x, unsigned char y){
-  60   1        unsigned int xdata *p = Area;
-  61   1        unsigned char i,j;
-  62   1        unsigned int a;
-  63   1        p += y;
-  64   1        for(i = 0; i < 6; i++ ){
-  65   2          a = trackSquare[i];
-  66   2          a <<= (5-x);
-  67   2          *p |= a;
-  68   2          p++;
-  69   2        }
-  70   1      
-  71   1      }
-*** WARNING C280 IN LINE 61 OF st7735_TFT.c: 'j': unreferenced local variable
-  72          
-  73          //Show trackSquare
-  74          unsigned char showTrackSquare_Down(unsigned char x, unsigned char y, unsigned int color){
-  75   1        signed char i,j;
-  76   1        unsigned char data temptrack[6],aa[6];
-  77   1        unsigned char data *pTrack = trackSquare;
-  78   1        unsigned char row;
-  79   1        for(i = 0; i < 6; i++)
-  80   1          temptrack[i] = *pTrack++;
-  81   1        pTrack = &temptrack[5];
-  82   1        for(i = 0; i <= 3; i++ ){
-  83   2          pTrack--;
-  84   2          row = tetris[i] << 1;
-  85   2          *pTrack = (*pTrack) | row;             //temptrack区域与俄罗斯方块相或
-  86   2        }
-  87   1        pTrack = &trackSquare[5];                  //指向第5行
-  88   1      
-  89   1        for(i = 0; i <= 3; i++){
-  90   2          row = tetris[i] << 1;
-  91   2          if(*pTrack & row || (y == 17))
-  92   2          return  1;
-  93   2          *pTrack = (*pTrack) | row;             //track区域与俄罗斯方块相或,保存这次移动操作的数据
-  94   2          pTrack--;
-  95   2        }
-  96   1        pTrack = &temptrack[0];
-  97   1        for(i = 0; i < 6; i++){
-  98   2          aa[i] = *pTrack ^ trackSquare[i];
-  99   2          pTrack++;                             //异或得到改变位存入aa
- 100   2        }
- 101   1        for(i = 0; i < 6; i++){                 //逐行扫描
- 102   2          if(aa[i]){                           //异或值为真，改变颜色
- 103   3            row = 0x10;
- 104   3            for(j = 0; j < 6; j++){             //行内扫描
- 105   4              if(aa[i] & row ){                 //按位判断
- 106   5                if(temptrack[i] & row)        //原来的值为真，改成背景色（黑色），否则填充颜色
- 107   5                  fillPoint(x+j+1,y+i,BLACK);
- 108   5                else
- 109   5                  fillPoint(x+j+1,y+i,color);
- 110   5              }
- 111   4              row >>= 1;
- 112   4            }
- 113   3          }
+  54          void trackSquare_Read(unsigned char x, unsigned char y){
+  55   1        unsigned int xdata *p = Area;
+  56   1        unsigned char i;
+  57   1        p += y;           //数据开始行
+  58   1        for(i = 0; i < 6; i++){
+  59   2          trackSquare[i] = (*p >> (14-6+1-x)) & 0; //取出6位数据
+  60   2          p++;
+  61   2        }
+  62   1        p = groundx;
+  63   1        p += y;           //数据开始行
+  64   1        for(i = 0; i < 6; i++){
+  65   2          ground[i] = (*p >> (14-6+1-x)); //取出6位数据
+  66   2          p++;
+  67   2        }
+  68   1      
+  69   1      }
+  70          
+  71          void trackSquare_Write(unsigned char x, unsigned char y){
+  72   1        unsigned int xdata *p = Area;
+  73   1        unsigned char i,j;
+  74   1        unsigned int a;
+  75   1        p += y;
+  76   1        for(i = 0; i < 6; i++ ){
+  77   2          a = trackSquare[i];
+  78   2          a <<= (14-6+1-x);
+  79   2          *p = a;
+  80   2          p++;
+  81   2        }
+  82   1      
+  83   1      }
+*** WARNING C280 IN LINE 73 OF st7735_TFT.c: 'j': unreferenced local variable
+  84          
+  85          //Show trackSquare
+  86          unsigned char showTrackSquare_Down(unsigned char x, unsigned char y, unsigned int color){
+  87   1        signed char i,j;
+  88   1        unsigned char data temptrack[6],aa[6];
+  89   1        unsigned char data *pTrack = trackSquare;
+  90   1        unsigned char row;
+  91   1        x += 1;                                          //游戏界面向右平移2格
+  92   1        for(i = 0; i < 6; i++)
+  93   1          temptrack[i] = *pTrack++;
+  94   1        pTrack = &temptrack[5];
+  95   1        for(i = 0; i <= 3; i++ ){
+  96   2          pTrack--;
+  97   2          row = tetris[i] << 1;
+  98   2          *pTrack = (*pTrack) | row;             //temptrack区域与俄罗斯方块相或
+  99   2        }
+ 100   1        pTrack = &ground[5];                  //指向第5行
+ 101   1        j = 5;
+ 102   1        for(i = 0; i <= 3; i++){
+ 103   2          row = tetris[i] << 1;
+ 104   2        //  if((*pTrack & row) > 0)
+ 105   2        //  return  1;
+ 106   2          trackSquare[j] = (*pTrack) | row;             //track区域与俄罗斯方块相或,保存这次移动操作的数据
+ 107   2          pTrack--;
+ 108   2          j--;
+ 109   2        }
+ 110   1        pTrack = &temptrack[0];
+ 111   1        for(i = 0; i < 6; i++){
+ 112   2          aa[i] = *pTrack ^ trackSquare[i];
+ 113   2          pTrack++;                             //异或得到改变位存入aa
  114   2        }
-C51 COMPILER V9.59.0.0   ST7735_TFT                                                        04/17/2019 21:35:35 PAGE 3   
+C51 COMPILER V9.59.0.0   ST7735_TFT                                                        04/18/2019 12:06:24 PAGE 3   
 
- 115   1        return 0;
- 116   1      }
- 117          
- 118          
- 119          //游戏界面12X20，用一个16位数据保存一行，高4位无效，共20行，20个数据
- 120          void tetris_Storage(unsigned int cube){
- 121   1        unsigned char i;
- 122   1        for(i = 0; i < 4; i++){
- 123   2          tetris[i] = cube & 0x0f;
- 124   2          cube >>= 4;
- 125   2        }
- 126   1      }
- 127          void main(void)
- 128          {
- 129   1        unsigned char i;
- 130   1        lcd_initial(); //液晶屏初始化
- 131   1        bl=1;//背光采用IO控制，也可以直接接到高电平常亮
- 132   1        LCD_Clear(BLACK);   //黑色
- 133   1      
- 134   1        print_Tetris(square_x+1,5,0x88c0,YELLOW);
- 135   1        delay(500);
- 136   1        trackSquare_Read(square_x,4);
- 137   1        showTrackSquare_Down(square_x,4,RED);
- 138   1        trackSquare_Write(square_x,4);
- 139   1        i = 0;
- 140   1        while(1){
- 141   2          trackSquare_Read(square_x,5+i);
- 142   2          showTrackSquare_Down(square_x, 5+i, RED );
- 143   2          trackSquare_Write(square_x,5+i);
- 144   2      
- 145   2          delay(1500);
- 146   2          i++;
- 147   2        }
- 148   1        while(1)
- 149   1        {
- 150   2        delay(500);
- 151   2         }
- 152   1      
- 153   1      }
+ 115   1        for(i = 0; i < 6; i++){                 //逐行扫描
+ 116   2          if(aa[i]){                           //异或值为真，改变颜色
+ 117   3            row = 0x10;
+ 118   3            for(j = 0; j < 6; j++){             //行内扫描
+ 119   4              if(aa[i] & row ){                 //按位判断
+ 120   5                if(temptrack[i] & row)        //原来的值为真，改成背景色（黑色），否则填充颜色
+ 121   5                  fillPoint(x+j+1,y+i,BLACK);
+ 122   5                else
+ 123   5                  fillPoint(x+j+1,y+i,color);
+ 124   5              }
+ 125   4              row >>= 1;
+ 126   4            }
+ 127   3          }
+ 128   2        }
+ 129   1        return 0;
+ 130   1      }
+ 131          
+ 132          
+ 133          //游戏界面12X20，用一个16位数据保存一行，高4位无效，共20行，20个数据
+ 134          void tetris_Storage(unsigned int cube){
+ 135   1        unsigned char i;
+ 136   1        for(i = 0; i < 4; i++){
+ 137   2          tetris[i] = cube & 0x0f;
+ 138   2          cube >>= 4;
+ 139   2        }
+ 140   1      }
+ 141          void main(void)
+ 142          {
+ 143   1        unsigned char i;
+ 144   1        Area[18] = 0xffff;//游戏下边界
+ 145   1        Area[17] = 0xffff;
+ 146   1        lcd_initial(); //液晶屏初始化
+ 147   1        bl=1;//背光采用IO控制，也可以直接接到高电平常亮
+ 148   1        LCD_Clear(BLACK);   //黑色
+ 149   1      
+ 150   1        print_Tetris(square_x+1,5,0x88c0,YELLOW);
+ 151   1        delay(500);
+ 152   1        trackSquare_Read(square_x,4);
+ 153   1        showTrackSquare_Down(square_x,4,RED);
+ 154   1        trackSquare_Write(square_x,4);
+ 155   1        i = 0;
+ 156   1        Area[0] = 0x75a2;
+ 157   1        trackSquare_Read(11,0);
+ 158   1        trackSquare_Write(11,0);
+ 159   1        if(Area[0] == 0x00a2)
+ 160   1        fillPoint(0,3,GREEN);
+ 161   1        while(0){
+ 162   2          trackSquare_Read(square_x,5+i);
+ 163   2          showTrackSquare_Down(square_x, 5+i, RED );
+ 164   2        /*  if(showTrackSquare_Down(square_x, 5+i, RED ))
+ 165   2          break;
+ 166   2      */    trackSquare_Write(square_x,5+i);
+ 167   2      
+ 168   2          delay(1000);
+ 169   2          i++;
+ 170   2        }
+ 171   1        while(1)
+ 172   1        {
+ 173   2        delay(500);
+ 174   2         }
+ 175   1      
+ 176   1      }
+C51 COMPILER V9.59.0.0   ST7735_TFT                                                        04/18/2019 12:06:24 PAGE 4   
+
+*** WARNING C294 IN LINE 162 OF st7735_TFT.c: unreachable code
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =   1697    ----
+   CODE SIZE        =   1750    ----
    CONSTANT SIZE    =   ----    ----
-   XDATA SIZE       =     40    ----
+   XDATA SIZE       =     80    ----
    PDATA SIZE       =   ----    ----
-   DATA SIZE        =     15      54
+   DATA SIZE        =     21      55
    IDATA SIZE       =   ----    ----
    BIT SIZE         =   ----    ----
 END OF MODULE INFORMATION.
 
 
-C51 COMPILATION COMPLETE.  1 WARNING(S),  0 ERROR(S)
+C51 COMPILATION COMPLETE.  2 WARNING(S),  0 ERROR(S)
