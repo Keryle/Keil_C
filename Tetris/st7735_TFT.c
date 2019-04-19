@@ -8,7 +8,7 @@ unsigned char data trackSquare[6];
 unsigned char xdata groundx[20];
 unsigned char data tetris[5] = {0x00,0x0c,0x08,0x08,0};       //低四位存行数据
 unsigned char data ground[5];
-unsigned char square_x = 4, square_y = 0;
+unsigned char square_x = 5, square_y = 0;
 
 void fillRectangle(unsigned char x, unsigned char y, unsigned char w, unsigned char h, unsigned int color){
   if((x >= TFT_Width) || (y >= TFT_Height))
@@ -53,7 +53,7 @@ void trackSquare_Read(unsigned char x, unsigned char y){
   unsigned char i;
   p += y;           //数据开始行
   for(i = 0; i < 6; i++){
-    trackSquare[i] = (*p >> (9-x)) & 0x3f; //取出6位数据，右移 11-6-x = 5-x位，再屏蔽高两位
+    trackSquare[i] = (*p >> (9-x)); //取出6位数据，右移 11-6-x = 5-x位，再屏蔽高两位
     p++;
   }
 
@@ -78,7 +78,7 @@ void trackSquare_Write(unsigned char x, unsigned char y){
 }
 
 //Show trackSquare
-unsigned char showTrackSquare_Down(unsigned char x, unsigned char y, unsigned int color){
+unsigned char showTrackSquare_Down(unsigned char x, unsigned char y, unsigned char direction){
   signed char i,j;
   unsigned char data temptrack[6],aa[6];
   unsigned char data *pTrack =trackSquare;
@@ -89,12 +89,34 @@ unsigned char showTrackSquare_Down(unsigned char x, unsigned char y, unsigned in
 
   for(i = 0; i < 6; i++ )
     trackSquare[i]=0;                              //清零
-  for(i = 0; i < 4; i++){                         //指向第5行
-    row = tetris[i] << 1;
-    if((ground[5-i] & row) > 0)
-      return 1;
-    trackSquare[5-i] = ground[5-i] | row;             //track区域与俄罗斯方块相或,保存这次移动操作的数据
-  }
+
+  if(direction == 0)                               //下降
+    for(i = 0; i < 4; i++){
+      row = tetris[i] << 1;
+      if((ground[5-i] & row) > 0)
+        return 1;
+      trackSquare[5-i] = ground[5-i] | row;             //track区域与俄罗斯方块相或,保存这次移动操作的数据
+      }
+  else
+    if(direction == 1)                             //左移
+      for(i = 0; i < 4; i++){
+        row = tetris[i] << 2;
+        if((ground[4-i] & row) > 0)
+          return 1;
+        trackSquare[4-i] = ground[4-i] | row;
+      }
+    else
+      if(direction == 2)                          //右移
+        for(i = 0; i < 4; i++){
+          row = tetris[i];
+          if(ground[4-i] & row)
+            return 1;
+          trackSquare[4-i] = ground[4-i] | row;
+        }
+      else
+        return 1;
+  if(ground[2] == 0xc0)
+    fillPoint(1,1,RED);
   pTemp = &temptrack[0];
   pTrack = trackSquare;
   for(i = 0; i < 6; i++){
@@ -102,15 +124,17 @@ unsigned char showTrackSquare_Down(unsigned char x, unsigned char y, unsigned in
     pTrack++;
     pTemp++;                            //异或得到改变位存入aa
   }
+  if(aa[1] == 0x20)
+  fillPoint(2,2,RED);
   for(i = 0; i < 6; i++){                 //逐行扫描
     if(aa[i]){                           //异或值为真，改变颜色
-      row = 0x10;
+      row = 0x20;
       for(j = 0; j < 6; j++){             //行内扫描
         if(aa[i] & row ){                 //按位判断
           if(temptrack[i] & row)        //原来的值为真，改成背景色（黑色），否则填充颜色
             fillPoint(x+j+1,y+i,BLACK);
           else
-            fillPoint(x+j+1,y+i,color);
+            fillPoint(x+j+1,y+i,RED);
         }
         row >>= 1;
       }
@@ -128,6 +152,7 @@ void tetris_Storage(unsigned int cube){
     cube >>= 4;
   }
 }
+
 void main(void)
 {
   unsigned char i;
@@ -135,28 +160,28 @@ void main(void)
     ground[i]=0;
   }
   for(i = 0; i < 20; i++){
-    groundx[i]=0;
+    groundx[i] = 0xf007;
     Area[i]=0;
   }
   groundx[18] = 0xffff;
   lcd_initial(); //液晶屏初始化
   bl=1;//背光采用IO控制，也可以直接接到高电平常亮
-  LCD_Clear(WHITE);		//黑色
+  //LCD_Clear(WHITE);		//黑色
 
   print_Tetris(square_x+1,5,0x88c0,YELLOW);
   delay(500);
   trackSquare_Read(square_x,4);
-
+  //showTrackSquare_Down(square_x, 5+i, 1 );
   trackSquare_Write(square_x,4);
   i = 0;
   while(1){
-    trackSquare_Read(square_x,5+i);
-    if(showTrackSquare_Down(square_x, 5+i, RED ) == 1)
+    trackSquare_Read(square_x,5);
+    if(showTrackSquare_Down(square_x, 5, 0 ) == 1)
       break;
-    trackSquare_Write(square_x,5+i);
+    trackSquare_Write(square_x,5);
 
     delay(1000);
-    i++;
+    square_x--;
   }
   while(1)
   {
