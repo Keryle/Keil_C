@@ -121,7 +121,7 @@ unsigned char showTrackSquare_Down(unsigned char x, unsigned char y, unsigned ch
       if((ground[5-i] & row) > 0){
         tetris_Storage(x,y,temptrack);
         square_y = 0;
-        square_x = 4;
+        square_x = 2;
         return 1;
       }
       trackSquare[5-i] = ground[5-i] | row;             //track区域与俄罗斯方块相或,保存这次移动操作的数据

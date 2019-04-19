@@ -1,4 +1,4 @@
-C51 COMPILER V9.59.0.0   ST7735_TFT                                                        04/19/2019 17:26:22 PAGE 1   
+C51 COMPILER V9.59.0.0   ST7735_TFT                                                        04/19/2019 23:19:18 PAGE 1   
 
 
 C51 COMPILER V9.59.0.0, COMPILATION OF MODULE ST7735_TFT
@@ -62,7 +62,7 @@ line level    source
   51          //高位为1代表左墙壁，低三位置1代表右墙壁
   52          /*  墙    1  2  3  4  5  6  7  8  9  10 11   墙14
   53              11 |  x  x  x  x  x  x  x  x  x  x  x  | 111      0xc007
-C51 COMPILER V9.59.0.0   ST7735_TFT                                                        04/19/2019 17:26:22 PAGE 2   
+C51 COMPILER V9.59.0.0   ST7735_TFT                                                        04/19/2019 23:19:18 PAGE 2   
 
   54          */
   55          void trackSquare_Read(unsigned char x, unsigned char y){
@@ -126,7 +126,7 @@ line level    source
  113   1          temptrack[i] = *pTrack++;
  114   1      
  115   1        for(i = 0; i < 6; i++ )
-C51 COMPILER V9.59.0.0   ST7735_TFT                                                        04/19/2019 17:26:22 PAGE 3   
+C51 COMPILER V9.59.0.0   ST7735_TFT                                                        04/19/2019 23:19:18 PAGE 3   
 
  116   1          trackSquare[i]=0;                              //清零
  117   1      
@@ -136,7 +136,7 @@ line level    source
  121   2            if((ground[5-i] & row) > 0){
  122   3              tetris_Storage(x,y,temptrack);
  123   3              square_y = 0;
- 124   3              square_x = 4;
+ 124   3              square_x = 2;
  125   3              return 1;
  126   3            }
  127   2            trackSquare[5-i] = ground[5-i] | row;             //track区域与俄罗斯方块相或,保存这次移动操作的数据
@@ -190,7 +190,7 @@ line level    source
  175          
  176          
  177          void main(void)
-C51 COMPILER V9.59.0.0   ST7735_TFT                                                        04/19/2019 17:26:22 PAGE 4   
+C51 COMPILER V9.59.0.0   ST7735_TFT                                                        04/19/2019 23:19:18 PAGE 4   
 
  178          {
  179   1        unsigned char i;
@@ -220,18 +220,17 @@ line level    source
  203   3              Area[i]=groundx[i];
  204   3          }
  205   2          square_y++;
- 206   2          delay(100);
- 207   2        }
- 208   1        while(1)
- 209   1        {
- 210   2        delay(500);
- 211   2         }
- 212   1      
- 213   1      }
+ 206   2        }
+ 207   1        while(1)
+ 208   1        {
+ 209   2        delay(500);
+ 210   2         }
+ 211   1      
+ 212   1      }
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =   2177    ----
+   CODE SIZE        =   2171    ----
    CONSTANT SIZE    =   ----    ----
    XDATA SIZE       =     80    ----
    PDATA SIZE       =   ----    ----
