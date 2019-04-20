@@ -5,9 +5,9 @@
 unsigned int xdata Area[20];
 unsigned int xdata groundx[20];
 unsigned char data trackSquare[6];
-unsigned char data tetris[5] = {0x00,0x0c,0x08,0x08,0};       //低四位存行数据
-unsigned char data ground[5];
-unsigned char square_x = 4, square_y = 0;
+unsigned char data tetris[5] = {0x00,0x0c,0x08,0x8,0};       //低四位存行数据
+
+unsigned char square_x = 6, square_y = 9;
 
 void fillRectangle(unsigned char x, unsigned char y, unsigned char w, unsigned char h, unsigned int color){
   if((x >= TFT_Width) || (y >= TFT_Height))
@@ -57,13 +57,7 @@ void trackSquare_Read(unsigned char x, unsigned char y){
   unsigned char i;
   p += y;           //数据开始行
   for(i = 0; i < 6; i++){
-    trackSquare[i] = (*p >> (9-x)); //取出6位数据，右移
-    p++;
-  }
-  p = groundx;
-  p += y;
-  for(i = 0; i < 6; i++){
-    ground[i] = (*p >> (9-x)); //取出6位数据，右移
+    trackSquare[i] = (*p >> (9-x)) & 0x3f; //取出6位数据，右移 14-6+1-x=9-x
     p++;
   }
 }
@@ -76,7 +70,7 @@ void trackSquare_Write(unsigned char x, unsigned char y){
   for(i = 0; i < 6; i++ ){
     a = trackSquare[i];
     a <<= (9-x);
-    *p |= a;
+    *p = a;
     p++;
   }
 
@@ -85,21 +79,21 @@ void tetris_Storage(unsigned char x, unsigned char y, unsigned char *p){
   unsigned int xdata *pgroundx = groundx;
   unsigned char i;
   unsigned int a;
-  pgroundx += (y+2);
+  pgroundx += (y);
   for(i = 0; i < 6; i++ ){
-    a = *p;
+    a = *p & 0x3f;                   //屏蔽高两位
     a <<= (9-x);
-    *pgroundx |= a;
+    *pgroundx |= a;                  //写入上一次tracksquare中的数据
     p++;
     pgroundx++;
   }
-/*  a = 0x0001;
+  a = 0x8000;
   for(i = 0; i < 16;i++){
     if(groundx[16] & a)
       fillPoint(i, 0, RED);
-    a <<=1;
+    a >>= 1;
   }
-  */
+
 }
 
 //Show trackSquare
@@ -112,35 +106,35 @@ unsigned char showTrackSquare_Down(unsigned char x, unsigned char y, unsigned ch
   for(i = 0; i < 6; i++)
     temptrack[i] = *pTrack++;
 
-  for(i = 0; i < 6; i++ )
-    trackSquare[i]=0;                              //清零
+  for(i = 0; i < 6; i++)
+    trackSquare[i] = groundx[y+i] >> (9-x) & 0x3f; //背景数据写入tracksquare
 
   if(direction == 0)                               //下降
     for(i = 0; i < 4; i++){
       row = tetris[i] << 1;
-      if((ground[5-i] & row) > 0){
+      if(tetris[i+1] & trackSquare[4-i] >> 1){    //tracksquare 低6位中间4位保存数据，而teteris低四位保存数据， 右移一位
         tetris_Storage(x,y,temptrack);
-        square_y = 0;
-        square_x = 2;
+        square_y = 8;
+        square_x = 3;
         return 1;
       }
-      trackSquare[5-i] = ground[5-i] | row;             //track区域与俄罗斯方块相或,保存这次移动操作的数据
-      }
+      trackSquare[5-i] |= row;             //track区域与俄罗斯方块相或,保存这次移动操作的数据
+    }
   else
     if(direction == 1)                             //左移
       for(i = 0; i < 4; i++){
         row = tetris[i] << 2;
-        if((ground[4-i] & row) > 0)
+        if(tetris[i] & trackSquare[4-i] >> 2)
           return 1;
-        trackSquare[4-i] = ground[4-i] | row;
+        trackSquare[5-i] |= row;
       }
     else
       if(direction == 2)                          //右移
         for(i = 0; i < 4; i++){
           row = tetris[i];
-          if(ground[4-i] & row)
+          if(tetris[i+1] & trackSquare[4-i] >> 1)
             return 1;
-          trackSquare[4-i] = ground[4-i] | row;
+          trackSquare[5-i] |= row;
         }
       else
         return 1;
@@ -177,32 +171,32 @@ unsigned char showTrackSquare_Down(unsigned char x, unsigned char y, unsigned ch
 void main(void)
 {
   unsigned char i;
-  for(i = 0; i < 6; i++){
-    ground[i]=0;
-  }
   for(i = 0; i < 20; i++){
-    groundx[i] = 0xc003;
-    Area[i]=0;
+    groundx[i] = 0xc000;
+    Area[i]=0xc000;
   }
-  groundx[19] = 0xffff;
+
+
+  groundx[18] = 0x0f7f;
+  Area[18] = 0x0f7f;
+  //Area[19] = 0xffff;
   lcd_initial(); //液晶屏初始化
   bl=1;//背光采用IO控制，也可以直接接到高电平常亮
-  LCD_Clear(BLACK);		//黑色
+  //LCD_Clear(BLACK);		//黑色
 
   //print_Tetris(square_x+1,6,0x88c0,YELLOW);
   delay(500);
   while(1){
     trackSquare_Read(square_x,square_y);
-    if(!showTrackSquare_Down(square_x, square_y, 0 )){
+    if(!showTrackSquare_Down(square_x, square_y, 1 )){
       trackSquare_Write(square_x,square_y);
     }
     else{
-      for(i = 0; i < 6; i++)
-        trackSquare[i]=0;
       for(i = 0; i < 20; i++)
         Area[i]=groundx[i];
     }
-    square_y++;
+    square_x--;
+    delay(500);
   }
   while(1)
   {

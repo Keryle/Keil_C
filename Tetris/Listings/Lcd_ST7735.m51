@@ -1,4 +1,4 @@
-BL51 BANKED LINKER/LOCATER V6.22.2.0                                                    04/19/2019  23:19:17  PAGE 1
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                    04/20/2019  19:42:33  PAGE 1
 
 
 BL51 BANKED LINKER/LOCATER V6.22.2.0, INVOKED BY:
@@ -24,44 +24,45 @@ LINK MAP OF MODULE:  .\Objects\Lcd_ST7735 (ST7735_TFT)
 
             * * * * * * *   D A T A   M E M O R Y   * * * * * * *
             REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
-            DATA    0008H     0021H     UNIT         _DATA_GROUP_
-            DATA    0029H     0012H     UNIT         ?DT?ST7735_TFT
-            DATA    003BH     000AH     UNIT         ?DT?_PRINT_TETRIS?ST7735_TFT
-            DATA    0045H     0006H     UNIT         ?DT?_FILLRECTANGLE?ST7735_TFT
-            IDATA   004BH     0001H     UNIT         ?STACK
+            DATA    0008H     0027H     UNIT         _DATA_GROUP_
+            DATA    002FH     000DH     UNIT         ?DT?ST7735_TFT
+            DATA    003CH     000AH     UNIT         ?DT?_PRINT_TETRIS?ST7735_TFT
+            DATA    0046H     0006H     UNIT         ?DT?_FILLRECTANGLE?ST7735_TFT
+            DATA    004CH     0002H     UNIT         ?DT?_LCD_CLEAR?ST7735_TFT
+            IDATA   004EH     0001H     UNIT         ?STACK
 
             * * * * * * *  X D A T A   M E M O R Y  * * * * * * *
             XDATA   0000H     0050H     UNIT         ?XD?ST7735_TFT
 
             * * * * * * *   C O D E   M E M O R Y   * * * * * * *
             CODE    0000H     0003H     ABSOLUTE     
-            CODE    0003H     020EH     UNIT         ?PR?_SHOWTRACKSQUARE_DOWN?ST7735_TFT
-            CODE    0211H     01AEH     UNIT         ?PR?LCD_INITIAL?ST7735_TFT
-            CODE    03BFH     00D9H     UNIT         ?PR?MAIN?ST7735_TFT
-            CODE    0498H     00BDH     UNIT         ?PR?_FILLRECTANGLE?ST7735_TFT
-            CODE    0555H     0091H     UNIT         ?PR?_TRACKSQUARE_READ?ST7735_TFT
-            CODE    05E6H     008CH     UNIT         ?C_C51STARTUP
-            CODE    0672H     0084H     UNIT         ?PR?_TETRIS_STORAGE?ST7735_TFT
-            CODE    06F6H     0068H     UNIT         ?PR?_PRINT_TETRIS?ST7735_TFT
-            CODE    075EH     0067H     UNIT         ?PR?_TRACKSQUARE_WRITE?ST7735_TFT
-            CODE    07C5H     0048H     UNIT         ?PR?_FILLPOINT?ST7735_TFT
-            CODE    080DH     003DH     UNIT         ?PR?_LCD_SETREGION?ST7735_TFT
-            CODE    084AH     003CH     UNIT         ?PR?_LCD_CLEAR?ST7735_TFT
-            CODE    0886H     0022H     UNIT         ?PR?_SPI_WRITEDATA?ST7735_TFT
-            CODE    08A8H     0020H     UNIT         ?PR?_DELAY?ST7735_TFT
-            CODE    08C8H     0019H     UNIT         ?C?LIB_CODE
-            CODE    08E1H     0018H     UNIT         ?PR?_LCD_WRITEDATA_16?ST7735_TFT
-            CODE    08F9H     0012H     UNIT         ?PR?_LCD_WRITEDATA?ST7735_TFT
-            CODE    090BH     000EH     UNIT         ?PR?RESET?ST7735_TFT
-            CODE    0919H     000EH     UNIT         ?C_INITSEG
-            CODE    0927H     000AH     UNIT         ?PR?_LCD_WRITEINDEX?ST7735_TFT
+            CODE    0003H     023AH     UNIT         ?PR?_SHOWTRACKSQUARE_DOWN?ST7735_TFT
+            CODE    023DH     01AEH     UNIT         ?PR?LCD_INITIAL?ST7735_TFT
+            CODE    03EBH     00BDH     UNIT         ?PR?_FILLRECTANGLE?ST7735_TFT
+            CODE    04A8H     00B8H     UNIT         ?PR?_TETRIS_STORAGE?ST7735_TFT
+            CODE    0560H     00B0H     UNIT         ?PR?MAIN?ST7735_TFT
+            CODE    0610H     008CH     UNIT         ?C_C51STARTUP
+            CODE    069CH     0068H     UNIT         ?PR?_PRINT_TETRIS?ST7735_TFT
+            CODE    0704H     0059H     UNIT         ?PR?_TRACKSQUARE_WRITE?ST7735_TFT
+            CODE    075DH     004AH     UNIT         ?PR?_TRACKSQUARE_READ?ST7735_TFT
+            CODE    07A7H     0048H     UNIT         ?PR?_FILLPOINT?ST7735_TFT
+            CODE    07EFH     003DH     UNIT         ?PR?_LCD_SETREGION?ST7735_TFT
+            CODE    082CH     003CH     UNIT         ?PR?_LCD_CLEAR?ST7735_TFT
+            CODE    0868H     0022H     UNIT         ?PR?_SPI_WRITEDATA?ST7735_TFT
+            CODE    088AH     0020H     UNIT         ?PR?_DELAY?ST7735_TFT
+            CODE    08AAH     0019H     UNIT         ?C?LIB_CODE
+            CODE    08C3H     0018H     UNIT         ?PR?_LCD_WRITEDATA_16?ST7735_TFT
+            CODE    08DBH     0012H     UNIT         ?PR?_LCD_WRITEDATA?ST7735_TFT
+            CODE    08EDH     000EH     UNIT         ?PR?RESET?ST7735_TFT
+            CODE    08FBH     000EH     UNIT         ?C_INITSEG
+            CODE    0909H     000AH     UNIT         ?PR?_LCD_WRITEINDEX?ST7735_TFT
 
+
+
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  04/20/2019  19:42:33  PAGE 2
 
 
 OVERLAY MAP OF MODULE:   .\Objects\Lcd_ST7735 (ST7735_TFT)
-BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  04/19/2019  23:19:17  PAGE 2
-
-
 
 
 SEGMENT                                        DATA_GROUP 
@@ -73,11 +74,10 @@ SEGMENT                                        DATA_GROUP
 
 ?PR?MAIN?ST7735_TFT                          0008H    0001H
   +--> ?PR?LCD_INITIAL?ST7735_TFT
-  +--> ?PR?_LCD_CLEAR?ST7735_TFT
-  +--> ?PR?_DELAY?ST7735_TFT
   +--> ?PR?_TRACKSQUARE_READ?ST7735_TFT
   +--> ?PR?_SHOWTRACKSQUARE_DOWN?ST7735_TFT
   +--> ?PR?_TRACKSQUARE_WRITE?ST7735_TFT
+  +--> ?PR?_DELAY?ST7735_TFT
 
 ?PR?LCD_INITIAL?ST7735_TFT                   -----    -----
   +--> ?PR?RESET?ST7735_TFT
@@ -91,386 +91,374 @@ SEGMENT                                        DATA_GROUP
 ?PR?_LCD_WRITEINDEX?ST7735_TFT               -----    -----
   +--> ?PR?_SPI_WRITEDATA?ST7735_TFT
 
-?PR?_LCD_WRITEDATA?ST7735_TFT                0028H    0001H
+?PR?_LCD_WRITEDATA?ST7735_TFT                002EH    0001H
   +--> ?PR?_LCD_WRITEINDEX?ST7735_TFT
   +--> ?PR?_SPI_WRITEDATA?ST7735_TFT
-
-?PR?_LCD_CLEAR?ST7735_TFT                    0009H    0002H
-  +--> ?PR?_LCD_SETREGION?ST7735_TFT
-  +--> ?PR?_LCD_WRITEDATA_16?ST7735_TFT
-
-?PR?_LCD_SETREGION?ST7735_TFT                0020H    0008H
-  +--> ?PR?_LCD_WRITEDATA?ST7735_TFT
-  +--> ?PR?_LCD_WRITEINDEX?ST7735_TFT
-
-?PR?_LCD_WRITEDATA_16?ST7735_TFT             0020H    0001H
-  +--> ?PR?_SPI_WRITEDATA?ST7735_TFT
-
-?PR?_TRACKSQUARE_READ?ST7735_TFT             0009H    0001H
 
 ?PR?_SHOWTRACKSQUARE_DOWN?ST7735_TFT         0009H    0014H
   +--> ?PR?_TETRIS_STORAGE?ST7735_TFT
   +--> ?PR?_FILLPOINT?ST7735_TFT
 
-?PR?_TETRIS_STORAGE?ST7735_TFT               001DH    0005H
+?PR?_TETRIS_STORAGE?ST7735_TFT               001DH    0006H
+  +--> ?PR?_FILLPOINT?ST7735_TFT
 
-?PR?_FILLPOINT?ST7735_TFT                    001DH    0003H
+?PR?_FILLPOINT?ST7735_TFT                    0023H    0003H
   +--> ?PR?_LCD_SETREGION?ST7735_TFT
   +--> ?PR?_LCD_WRITEDATA_16?ST7735_TFT
 
+?PR?_LCD_SETREGION?ST7735_TFT                0026H    0008H
+  +--> ?PR?_LCD_WRITEDATA?ST7735_TFT
+  +--> ?PR?_LCD_WRITEINDEX?ST7735_TFT
+
+?PR?_LCD_WRITEDATA_16?ST7735_TFT             0026H    0001H
+  +--> ?PR?_SPI_WRITEDATA?ST7735_TFT
+
 ?PR?_TRACKSQUARE_WRITE?ST7735_TFT            0009H    0002H
-BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  04/19/2019  23:19:17  PAGE 3
-
-
 
 
 
 SYMBOL TABLE OF MODULE:  .\Objects\Lcd_ST7735 (ST7735_TFT)
+
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  04/20/2019  19:42:33  PAGE 3
+
 
   VALUE           TYPE          NAME
   ----------------------------------
 
   -------         MODULE        ST7735_TFT
   C:0000H         SYMBOL        _ICE_DUMMY_
-  C:0927H         PUBLIC        _Lcd_WriteIndex
-  C:08FEH         PUBLIC        _Lcd_WriteData
+  C:0909H         PUBLIC        _Lcd_WriteIndex
+  C:08E0H         PUBLIC        _Lcd_WriteData
   D:0090H         PUBLIC        P1
-  C:0211H         PUBLIC        lcd_initial
-  C:090BH         PUBLIC        Reset
-  C:080DH         PUBLIC        _Lcd_SetRegion
+  C:023DH         PUBLIC        lcd_initial
+  C:08EDH         PUBLIC        Reset
+  C:07EFH         PUBLIC        _Lcd_SetRegion
   X:0000H         PUBLIC        groundx
-  D:0029H         PUBLIC        trackSquare
-  C:06F6H         PUBLIC        _print_Tetris
-  C:08A8H         PUBLIC        _delay
-  D:002FH         PUBLIC        ground
-  C:084AH         PUBLIC        _LCD_Clear
-  D:0034H         PUBLIC        tetris
+  D:002FH         PUBLIC        trackSquare
+  C:069CH         PUBLIC        _print_Tetris
+  C:088AH         PUBLIC        _delay
+  C:082CH         PUBLIC        _LCD_Clear
+  D:0035H         PUBLIC        tetris
   B:0090H.2       PUBLIC        reset
-  C:03BFH         PUBLIC        main
+  C:0560H         PUBLIC        main
   C:0003H         PUBLIC        _showTrackSquare_Down
-  C:07C5H         PUBLIC        _fillPoint
+  C:07A7H         PUBLIC        _fillPoint
   B:0090H.1       PUBLIC        sda
   B:0090H.0       PUBLIC        scl
-  C:0498H         PUBLIC        _fillRectangle
-  C:08E1H         PUBLIC        _Lcd_WriteData_16
+  C:03EBH         PUBLIC        _fillRectangle
+  C:08C3H         PUBLIC        _Lcd_WriteData_16
   B:0090H.5       PUBLIC        bl
   B:0090H.4       PUBLIC        cs
-  C:0886H         PUBLIC        _SPI_WriteData
-  C:0672H         PUBLIC        _tetris_Storage
+  C:0868H         PUBLIC        _SPI_WriteData
+  C:04A8H         PUBLIC        _tetris_Storage
   B:0090H.3       PUBLIC        rs
-  C:0555H         PUBLIC        _trackSquare_Read
-  D:0039H         PUBLIC        square_x
-  D:003AH         PUBLIC        square_y
+  C:075DH         PUBLIC        _trackSquare_Read
+  D:003AH         PUBLIC        square_x
+  D:003BH         PUBLIC        square_y
   X:0028H         PUBLIC        Area
-  C:075EH         PUBLIC        _trackSquare_Write
+  C:0704H         PUBLIC        _trackSquare_Write
   -------         PROC          _DELAY
   D:0006H         SYMBOL        time
   -------         DO            
   D:0004H         SYMBOL        i
   D:0002H         SYMBOL        j
   -------         ENDDO         
-  C:08A8H         LINE#         81
-  C:08A8H         LINE#         82
-  C:08A8H         LINE#         84
-  C:08B2H         LINE#         85
-  C:08C7H         LINE#         86
+  C:088AH         LINE#         81
+  C:088AH         LINE#         82
+  C:088AH         LINE#         84
+  C:0894H         LINE#         85
+  C:08A9H         LINE#         86
   -------         ENDPROC       _DELAY
   -------         PROC          _SPI_WRITEDATA
   D:0007H         SYMBOL        Data
   -------         DO            
   D:0006H         SYMBOL        i
-BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  04/19/2019  23:19:17  PAGE 4
-
-
   -------         ENDDO         
-  C:0886H         LINE#         89
-  C:0886H         LINE#         90
-  C:0886H         LINE#         91
-  C:0886H         LINE#         92
-  C:0892H         LINE#         93
-  C:0892H         LINE#         94
-  C:0896H         LINE#         95
-  C:089AH         LINE#         96
-  C:089CH         LINE#         97
-  C:089EH         LINE#         98
-  C:08A0H         LINE#         99
-  C:08A4H         LINE#         100
-  C:08A7H         LINE#         101
+  C:0868H         LINE#         89
+  C:0868H         LINE#         90
+  C:0868H         LINE#         91
+  C:0868H         LINE#         92
+  C:0874H         LINE#         93
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  04/20/2019  19:42:33  PAGE 4
+
+
+  C:0874H         LINE#         94
+  C:0878H         LINE#         95
+  C:087CH         LINE#         96
+  C:087EH         LINE#         97
+  C:0880H         LINE#         98
+  C:0882H         LINE#         99
+  C:0886H         LINE#         100
+  C:0889H         LINE#         101
   -------         ENDPROC       _SPI_WRITEDATA
   -------         PROC          _LCD_WRITEINDEX
   D:0007H         SYMBOL        Data
-  C:0927H         LINE#         103
-  C:0927H         LINE#         104
-  C:0927H         LINE#         106
-  C:0929H         LINE#         107
-  C:092BH         LINE#         108
-  C:092EH         LINE#         109
-  C:0930H         LINE#         110
+  C:0909H         LINE#         103
+  C:0909H         LINE#         104
+  C:0909H         LINE#         106
+  C:090BH         LINE#         107
+  C:090DH         LINE#         108
+  C:0910H         LINE#         109
+  C:0912H         LINE#         110
   -------         ENDPROC       _LCD_WRITEINDEX
-  C:08F9H         SYMBOL        L?0135
-  -------         PROC          L?0134
-  -------         ENDPROC       L?0134
-  C:08F9H         SYMBOL        L?0135
+  C:08DBH         SYMBOL        L?0131
+  -------         PROC          L?0130
+  -------         ENDPROC       L?0130
+  C:08DBH         SYMBOL        L?0131
   -------         PROC          _LCD_WRITEDATA
   D:0007H         SYMBOL        Data
   -------         DO            
-  D:0028H         SYMBOL        i
+  D:002EH         SYMBOL        i
   -------         ENDDO         
-  C:08FEH         LINE#         112
-  C:08FEH         LINE#         113
-  C:08FEH         LINE#         114
-  C:0901H         LINE#         115
-  C:0903H         LINE#         116
-  C:0905H         LINE#         117
-  C:0908H         LINE#         118
-  C:090AH         LINE#         119
+  C:08E0H         LINE#         112
+  C:08E0H         LINE#         113
+  C:08E0H         LINE#         114
+  C:08E3H         LINE#         115
+  C:08E5H         LINE#         116
+  C:08E7H         LINE#         117
+  C:08EAH         LINE#         118
+  C:08ECH         LINE#         119
   -------         ENDPROC       _LCD_WRITEDATA
   -------         PROC          _LCD_WRITEDATA_16
   D:0004H         SYMBOL        Data
   -------         DO            
-  D:0020H         SYMBOL        i
+  D:0026H         SYMBOL        i
   -------         ENDDO         
-  C:08E1H         LINE#         121
-  C:08E5H         LINE#         122
-  C:08E5H         LINE#         123
-  C:08E8H         LINE#         124
-  C:08EAH         LINE#         125
-  C:08ECH         LINE#         126
-  C:08F1H         LINE#         127
-  C:08F6H         LINE#         128
-  C:08F8H         LINE#         130
-BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  04/19/2019  23:19:17  PAGE 5
-
-
+  C:08C3H         LINE#         121
+  C:08C7H         LINE#         122
+  C:08C7H         LINE#         123
+  C:08CAH         LINE#         124
+  C:08CCH         LINE#         125
+  C:08CEH         LINE#         126
+  C:08D3H         LINE#         127
+  C:08D8H         LINE#         128
+  C:08DAH         LINE#         130
   -------         ENDPROC       _LCD_WRITEDATA_16
   -------         PROC          RESET
-  C:090BH         LINE#         132
-  C:090BH         LINE#         133
-  C:090BH         LINE#         134
-  C:090DH         LINE#         135
-  C:0914H         LINE#         136
-  C:0916H         LINE#         137
+  C:08EDH         LINE#         132
+  C:08EDH         LINE#         133
+  C:08EDH         LINE#         134
+  C:08EFH         LINE#         135
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  04/20/2019  19:42:33  PAGE 5
+
+
+  C:08F6H         LINE#         136
+  C:08F8H         LINE#         137
   -------         ENDPROC       RESET
   -------         PROC          LCD_INITIAL
-  C:0211H         LINE#         141
-  C:0211H         LINE#         142
-  C:0211H         LINE#         143
-  C:0214H         LINE#         146
-  C:0219H         LINE#         147
-  C:0220H         LINE#         150
-  C:0222H         LINE#         151
-  C:0225H         LINE#         152
-  C:022AH         LINE#         153
-  C:022FH         LINE#         155
-  C:0231H         LINE#         156
-  C:0234H         LINE#         157
-  C:0239H         LINE#         158
-  C:023EH         LINE#         160
-  C:0240H         LINE#         161
-  C:0243H         LINE#         162
-  C:0248H         LINE#         163
-  C:024DH         LINE#         164
-  C:0252H         LINE#         165
-  C:0257H         LINE#         166
-  C:025CH         LINE#         168
-  C:0261H         LINE#         169
-  C:0266H         LINE#         172
-  C:026BH         LINE#         173
-  C:0270H         LINE#         174
-  C:0275H         LINE#         175
-  C:027AH         LINE#         176
-  C:027FH         LINE#         177
-  C:0284H         LINE#         179
-  C:0289H         LINE#         180
-  C:028EH         LINE#         181
-  C:0293H         LINE#         183
-  C:0298H         LINE#         184
-  C:029DH         LINE#         185
-  C:02A2H         LINE#         186
-  C:02A7H         LINE#         187
-  C:02ACH         LINE#         188
-  C:02B1H         LINE#         190
-  C:02B6H         LINE#         191
-  C:02BBH         LINE#         193
-  C:02C0H         LINE#         194
-  C:02C5H         LINE#         197
-  C:02CAH         LINE#         198
-  C:02CFH         LINE#         199
-  C:02D4H         LINE#         200
-  C:02D9H         LINE#         201
-  C:02DEH         LINE#         202
-BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  04/19/2019  23:19:17  PAGE 6
+  C:023DH         LINE#         141
+  C:023DH         LINE#         142
+  C:023DH         LINE#         143
+  C:0240H         LINE#         146
+  C:0245H         LINE#         147
+  C:024CH         LINE#         150
+  C:024EH         LINE#         151
+  C:0251H         LINE#         152
+  C:0256H         LINE#         153
+  C:025BH         LINE#         155
+  C:025DH         LINE#         156
+  C:0260H         LINE#         157
+  C:0265H         LINE#         158
+  C:026AH         LINE#         160
+  C:026CH         LINE#         161
+  C:026FH         LINE#         162
+  C:0274H         LINE#         163
+  C:0279H         LINE#         164
+  C:027EH         LINE#         165
+  C:0283H         LINE#         166
+  C:0288H         LINE#         168
+  C:028DH         LINE#         169
+  C:0292H         LINE#         172
+  C:0297H         LINE#         173
+  C:029CH         LINE#         174
+  C:02A1H         LINE#         175
+  C:02A6H         LINE#         176
+  C:02ABH         LINE#         177
+  C:02B0H         LINE#         179
+  C:02B5H         LINE#         180
+  C:02BAH         LINE#         181
+  C:02BFH         LINE#         183
+  C:02C4H         LINE#         184
+  C:02C9H         LINE#         185
+  C:02CEH         LINE#         186
+  C:02D3H         LINE#         187
+  C:02D8H         LINE#         188
+  C:02DDH         LINE#         190
+  C:02E2H         LINE#         191
+  C:02E7H         LINE#         193
+  C:02ECH         LINE#         194
+  C:02F1H         LINE#         197
+  C:02F6H         LINE#         198
+  C:02FBH         LINE#         199
+  C:0300H         LINE#         200
+  C:0305H         LINE#         201
+  C:030AH         LINE#         202
+  C:030FH         LINE#         203
+  C:0314H         LINE#         204
+  C:0319H         LINE#         205
+  C:031EH         LINE#         206
+  C:0323H         LINE#         207
+  C:0328H         LINE#         208
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  04/20/2019  19:42:33  PAGE 6
 
 
-  C:02E3H         LINE#         203
-  C:02E8H         LINE#         204
-  C:02EDH         LINE#         205
-  C:02F2H         LINE#         206
-  C:02F7H         LINE#         207
-  C:02FCH         LINE#         208
-  C:0301H         LINE#         209
-  C:0306H         LINE#         210
-  C:030BH         LINE#         211
-  C:0310H         LINE#         212
-  C:0315H         LINE#         213
-  C:031AH         LINE#         215
-  C:031FH         LINE#         216
-  C:0324H         LINE#         217
-  C:0329H         LINE#         218
-  C:032EH         LINE#         219
-  C:0333H         LINE#         220
-  C:0338H         LINE#         221
-  C:033DH         LINE#         222
-  C:0342H         LINE#         223
-  C:0347H         LINE#         224
-  C:034CH         LINE#         225
-  C:0351H         LINE#         226
-  C:0356H         LINE#         227
-  C:035BH         LINE#         228
-  C:0360H         LINE#         229
-  C:0365H         LINE#         230
-  C:036AH         LINE#         231
-  C:036FH         LINE#         233
-  C:0374H         LINE#         234
-  C:0379H         LINE#         235
-  C:037EH         LINE#         236
-  C:0383H         LINE#         237
-  C:0388H         LINE#         239
-  C:038DH         LINE#         240
-  C:0392H         LINE#         241
-  C:0397H         LINE#         242
-  C:039CH         LINE#         243
-  C:03A1H         LINE#         245
-  C:03A3H         LINE#         246
-  C:03A6H         LINE#         247
-  C:03ABH         LINE#         248
-  C:03B0H         LINE#         250
-  C:03B5H         LINE#         251
-  C:03BAH         LINE#         254
+  C:032DH         LINE#         209
+  C:0332H         LINE#         210
+  C:0337H         LINE#         211
+  C:033CH         LINE#         212
+  C:0341H         LINE#         213
+  C:0346H         LINE#         215
+  C:034BH         LINE#         216
+  C:0350H         LINE#         217
+  C:0355H         LINE#         218
+  C:035AH         LINE#         219
+  C:035FH         LINE#         220
+  C:0364H         LINE#         221
+  C:0369H         LINE#         222
+  C:036EH         LINE#         223
+  C:0373H         LINE#         224
+  C:0378H         LINE#         225
+  C:037DH         LINE#         226
+  C:0382H         LINE#         227
+  C:0387H         LINE#         228
+  C:038CH         LINE#         229
+  C:0391H         LINE#         230
+  C:0396H         LINE#         231
+  C:039BH         LINE#         233
+  C:03A0H         LINE#         234
+  C:03A5H         LINE#         235
+  C:03AAH         LINE#         236
+  C:03AFH         LINE#         237
+  C:03B4H         LINE#         239
+  C:03B9H         LINE#         240
+  C:03BEH         LINE#         241
+  C:03C3H         LINE#         242
+  C:03C8H         LINE#         243
+  C:03CDH         LINE#         245
+  C:03CFH         LINE#         246
+  C:03D2H         LINE#         247
+  C:03D7H         LINE#         248
+  C:03DCH         LINE#         250
+  C:03E1H         LINE#         251
+  C:03E6H         LINE#         254
   -------         ENDPROC       LCD_INITIAL
   -------         PROC          _LCD_SETREGION
   D:0082H         SYMBOL        x_start
   D:0004H         SYMBOL        y_start
   D:0002H         SYMBOL        x_end
-  D:0026H         SYMBOL        y_end
-  C:080DH         LINE#         263
-  C:080FH         LINE#         264
-  C:080FH         LINE#         265
-  C:0811H         LINE#         266
-  C:0814H         LINE#         267
-  C:081DH         LINE#         268
-BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  04/19/2019  23:19:17  PAGE 7
+  D:002CH         SYMBOL        y_end
+  C:07EFH         LINE#         263
+  C:07F1H         LINE#         264
+  C:07F1H         LINE#         265
+  C:07F3H         LINE#         266
+  C:07F6H         LINE#         267
+  C:07FFH         LINE#         268
+  C:0804H         LINE#         269
+  C:080BH         LINE#         271
+  C:0810H         LINE#         272
+  C:0815H         LINE#         273
+  C:081BH         LINE#         274
+  C:0820H         LINE#         275
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  04/20/2019  19:42:33  PAGE 7
 
 
-  C:0822H         LINE#         269
-  C:0829H         LINE#         271
-  C:082EH         LINE#         272
-  C:0833H         LINE#         273
-  C:0839H         LINE#         274
-  C:083EH         LINE#         275
-  C:0845H         LINE#         277
+  C:0827H         LINE#         277
   -------         ENDPROC       _LCD_SETREGION
   -------         PROC          _LCD_CLEAR
-  D:0009H         SYMBOL        Color
+  D:004CH         SYMBOL        Color
   -------         DO            
   D:0003H         SYMBOL        i
   D:0002H         SYMBOL        j
   -------         ENDDO         
-  C:084AH         LINE#         282
-  C:084EH         LINE#         283
-  C:084EH         LINE#         285
-  C:0860H         LINE#         286
-  C:086CH         LINE#         287
-  C:086CH         LINE#         288
-  C:0878H         LINE#         289
-  C:0878H         LINE#         290
-  C:087FH         LINE#         291
-  C:0882H         LINE#         292
-  C:0885H         LINE#         293
+  C:082CH         LINE#         282
+  C:0830H         LINE#         283
+  C:0830H         LINE#         285
+  C:0842H         LINE#         286
+  C:084EH         LINE#         287
+  C:084EH         LINE#         288
+  C:085AH         LINE#         289
+  C:085AH         LINE#         290
+  C:0861H         LINE#         291
+  C:0864H         LINE#         292
+  C:0867H         LINE#         293
   -------         ENDPROC       _LCD_CLEAR
   -------         PROC          _FILLRECTANGLE
-  D:0045H         SYMBOL        x
-  D:0046H         SYMBOL        y
-  D:0047H         SYMBOL        w
-  D:0048H         SYMBOL        h
-  D:0049H         SYMBOL        color
-  C:0498H         LINE#         12
-  C:049EH         LINE#         13
-  C:04BCH         LINE#         15
-  C:04D3H         LINE#         16
-  C:04D9H         LINE#         17
-  C:04F3H         LINE#         18
-  C:04F9H         LINE#         19
-  C:0529H         LINE#         20
-  C:0537H         LINE#         21
-  C:0545H         LINE#         22
-  C:054CH         LINE#         23
-  C:0550H         LINE#         24
-  C:0554H         LINE#         25
+  D:0046H         SYMBOL        x
+  D:0047H         SYMBOL        y
+  D:0048H         SYMBOL        w
+  D:0049H         SYMBOL        h
+  D:004AH         SYMBOL        color
+  C:03EBH         LINE#         12
+  C:03F1H         LINE#         13
+  C:040FH         LINE#         15
+  C:0426H         LINE#         16
+  C:042CH         LINE#         17
+  C:0446H         LINE#         18
+  C:044CH         LINE#         19
+  C:047CH         LINE#         20
+  C:048AH         LINE#         21
+  C:0498H         LINE#         22
+  C:049FH         LINE#         23
+  C:04A3H         LINE#         24
+  C:04A7H         LINE#         25
   -------         ENDPROC       _FILLRECTANGLE
   -------         PROC          _FILLPOINT
-  D:001DH         SYMBOL        x
+  D:0023H         SYMBOL        x
   D:0001H         SYMBOL        y
-  D:001EH         SYMBOL        color
+  D:0024H         SYMBOL        color
   -------         DO            
   D:0003H         SYMBOL        i
   -------         ENDDO         
-  C:07C5H         LINE#         27
-  C:07CDH         LINE#         29
-  C:07D5H         LINE#         30
-  C:07DBH         LINE#         31
-BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  04/19/2019  23:19:17  PAGE 8
-
-
-  C:07F6H         LINE#         32
-  C:0802H         LINE#         33
-  C:080CH         LINE#         34
+  C:07A7H         LINE#         27
+  C:07AFH         LINE#         29
+  C:07B7H         LINE#         30
+  C:07BDH         LINE#         31
+  C:07D8H         LINE#         32
+  C:07E4H         LINE#         33
+  C:07EEH         LINE#         34
   -------         ENDPROC       _FILLPOINT
   -------         PROC          _PRINT_TETRIS
-  D:003BH         SYMBOL        x
-  D:003CH         SYMBOL        y
-  D:003DH         SYMBOL        cube
-  D:003FH         SYMBOL        color
+  D:003CH         SYMBOL        x
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  04/20/2019  19:42:33  PAGE 8
+
+
+  D:003DH         SYMBOL        y
+  D:003EH         SYMBOL        cube
+  D:0040H         SYMBOL        color
   -------         DO            
-  D:0041H         SYMBOL        row
-  D:0042H         SYMBOL        i
-  D:0043H         SYMBOL        bit_row
-  D:0044H         SYMBOL        j
+  D:0042H         SYMBOL        row
+  D:0043H         SYMBOL        i
+  D:0044H         SYMBOL        bit_row
+  D:0045H         SYMBOL        j
   -------         ENDDO         
-  C:06F6H         LINE#         36
-  C:06FEH         LINE#         38
-  C:070CH         LINE#         39
-  C:0712H         LINE#         40
-  C:0724H         LINE#         41
-  C:0727H         LINE#         42
-  C:0735H         LINE#         43
-  C:073BH         LINE#         44
-  C:074FH         LINE#         45
-  C:0755H         LINE#         46
-  C:0759H         LINE#         47
-  C:075DH         LINE#         48
+  C:069CH         LINE#         36
+  C:06A4H         LINE#         38
+  C:06B2H         LINE#         39
+  C:06B8H         LINE#         40
+  C:06CAH         LINE#         41
+  C:06CDH         LINE#         42
+  C:06DBH         LINE#         43
+  C:06E1H         LINE#         44
+  C:06F5H         LINE#         45
+  C:06FBH         LINE#         46
+  C:06FFH         LINE#         47
+  C:0703H         LINE#         48
   -------         ENDPROC       _PRINT_TETRIS
   -------         PROC          _TRACKSQUARE_READ
-  D:0009H         SYMBOL        x
-  D:0001H         SYMBOL        y
+  D:0001H         SYMBOL        x
+  D:0005H         SYMBOL        y
   -------         DO            
-  D:0004H         SYMBOL        p
-  D:0003H         SYMBOL        i
+  D:0002H         SYMBOL        p
+  D:0005H         SYMBOL        i
   -------         ENDDO         
-  C:0555H         LINE#         55
-  C:0559H         LINE#         56
-  C:055DH         LINE#         58
-  C:0568H         LINE#         59
-  C:0574H         LINE#         60
-  C:0595H         LINE#         61
-  C:059CH         LINE#         62
-  C:059FH         LINE#         63
-  C:05A3H         LINE#         64
-  C:05AEH         LINE#         65
-  C:05BAH         LINE#         66
-  C:05DBH         LINE#         67
-  C:05E2H         LINE#         68
-  C:05E5H         LINE#         69
+  C:075DH         LINE#         55
+  C:075FH         LINE#         56
+  C:0763H         LINE#         58
+  C:076EH         LINE#         59
+  C:077AH         LINE#         60
+  C:079CH         LINE#         61
+  C:07A3H         LINE#         62
+  C:07A6H         LINE#         63
   -------         ENDPROC       _TRACKSQUARE_READ
   -------         PROC          _TRACKSQUARE_WRITE
   D:0001H         SYMBOL        x
@@ -479,41 +467,47 @@ SYMBOL TABLE OF MODULE:  .\Objects\Lcd_ST7735 (ST7735_TFT)
   D:0009H         SYMBOL        p
   D:0005H         SYMBOL        i
   D:0006H         SYMBOL        a
-BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  04/19/2019  23:19:17  PAGE 9
-
-
   -------         ENDDO         
-  C:075EH         LINE#         71
-  C:0760H         LINE#         72
-  C:0766H         LINE#         75
-  C:0776H         LINE#         76
-  C:0782H         LINE#         77
-  C:078AH         LINE#         78
-  C:079DH         LINE#         79
-  C:07B6H         LINE#         80
-  C:07C1H         LINE#         81
-  C:07C4H         LINE#         83
+  C:0704H         LINE#         65
+  C:0706H         LINE#         66
+  C:070CH         LINE#         69
+  C:071CH         LINE#         70
+  C:0728H         LINE#         71
+  C:0730H         LINE#         72
+  C:0743H         LINE#         73
+  C:074EH         LINE#         74
+  C:0759H         LINE#         75
+  C:075CH         LINE#         77
   -------         ENDPROC       _TRACKSQUARE_WRITE
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  04/20/2019  19:42:33  PAGE 9
+
+
   -------         PROC          _TETRIS_STORAGE
-  D:0004H         SYMBOL        x
+  D:001DH         SYMBOL        x
   D:0005H         SYMBOL        y
-  D:001DH         SYMBOL        p
+  D:0001H         SYMBOL        p
   -------         DO            
-  D:0020H         SYMBOL        pgroundx
-  D:0005H         SYMBOL        i
-  D:0006H         SYMBOL        a
+  D:001EH         SYMBOL        pgroundx
+  D:0020H         SYMBOL        i
+  D:0021H         SYMBOL        a
   -------         ENDDO         
-  C:0672H         LINE#         84
-  C:067AH         LINE#         85
-  C:0680H         LINE#         88
-  C:0698H         LINE#         89
-  C:06A4H         LINE#         90
-  C:06B0H         LINE#         91
-  C:06C3H         LINE#         92
-  C:06DCH         LINE#         93
-  C:06E7H         LINE#         94
-  C:06F2H         LINE#         95
-  C:06F5H         LINE#         103
+  C:04A8H         LINE#         78
+  C:04AAH         LINE#         79
+  C:04B0H         LINE#         82
+  C:04C0H         LINE#         83
+  C:04CEH         LINE#         84
+  C:04D8H         LINE#         85
+  C:04F2H         LINE#         86
+  C:050DH         LINE#         87
+  C:0514H         LINE#         88
+  C:051FH         LINE#         89
+  C:0523H         LINE#         90
+  C:0529H         LINE#         91
+  C:0537H         LINE#         92
+  C:0545H         LINE#         93
+  C:0550H         LINE#         94
+  C:055BH         LINE#         95
+  C:055FH         LINE#         97
   -------         ENDPROC       _TETRIS_STORAGE
   -------         PROC          _SHOWTRACKSQUARE_DOWN
   D:0009H         SYMBOL        x
@@ -528,107 +522,106 @@ SYMBOL TABLE OF MODULE:  .\Objects\Lcd_ST7735 (ST7735_TFT)
   D:001BH         SYMBOL        pTemp
   D:001CH         SYMBOL        row
   -------         ENDDO         
-  C:0003H         LINE#         106
-  C:0009H         LINE#         109
-  C:000CH         LINE#         110
-  C:000FH         LINE#         112
-  C:0024H         LINE#         113
-  C:0037H         LINE#         115
-  C:004CH         LINE#         116
-  C:0056H         LINE#         118
-  C:005AH         LINE#         119
-  C:0071H         LINE#         120
-  C:007AH         LINE#         121
-BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  04/19/2019  23:19:17  PAGE 10
+  C:0003H         LINE#         100
+  C:0009H         LINE#         103
+  C:000CH         LINE#         104
+  C:000FH         LINE#         106
+  C:0024H         LINE#         107
+  C:0037H         LINE#         109
+  C:004CH         LINE#         110
+  C:0088H         LINE#         112
+  C:008CH         LINE#         113
+  C:00A3H         LINE#         114
+  C:00ACH         LINE#         115
+  C:00C1H         LINE#         116
+  C:00CEH         LINE#         117
+  C:00D1H         LINE#         118
+  C:00D4H         LINE#         119
+  C:00D7H         LINE#         120
+  C:00D7H         LINE#         121
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  04/20/2019  19:42:33  PAGE 10
 
 
-  C:008EH         LINE#         122
-  C:009BH         LINE#         123
-  C:009EH         LINE#         124
-  C:00A1H         LINE#         125
-  C:00A4H         LINE#         126
-  C:00A4H         LINE#         127
-  C:00B7H         LINE#         128
-  C:00BBH         LINE#         130
-  C:00C4H         LINE#         131
-  C:00D8H         LINE#         132
-  C:00E3H         LINE#         133
-  C:00F8H         LINE#         134
-  C:00FBH         LINE#         135
-  C:010BH         LINE#         136
-  C:010FH         LINE#         138
-  C:0115H         LINE#         139
-  C:0129H         LINE#         140
-  C:0130H         LINE#         141
-  C:013FH         LINE#         142
-  C:0142H         LINE#         143
-  C:014CH         LINE#         144
-  C:0150H         LINE#         146
-  C:0153H         LINE#         147
-  C:0156H         LINE#         148
-  C:0159H         LINE#         149
-  C:016EH         LINE#         150
-  C:017EH         LINE#         151
-  C:0180H         LINE#         152
-  C:0182H         LINE#         153
-  C:0186H         LINE#         154
-  C:018CH         LINE#         155
-  C:0196H         LINE#         156
-  C:01ABH         LINE#         157
-  C:01B2H         LINE#         158
-  C:01B5H         LINE#         159
-  C:01CAH         LINE#         160
-  C:01D4H         LINE#         161
-  C:01DEH         LINE#         162
-  C:01EEH         LINE#         164
-  C:0200H         LINE#         165
-  C:0200H         LINE#         166
-  C:0206H         LINE#         167
-  C:020AH         LINE#         168
-  C:020AH         LINE#         169
-  C:020EH         LINE#         170
-  C:0210H         LINE#         171
+  C:00E3H         LINE#         122
+  C:00E7H         LINE#         124
+  C:00F0H         LINE#         125
+  C:0104H         LINE#         126
+  C:0110H         LINE#         127
+  C:0120H         LINE#         128
+  C:0123H         LINE#         129
+  C:012FH         LINE#         130
+  C:0133H         LINE#         132
+  C:0139H         LINE#         133
+  C:014DH         LINE#         134
+  C:0154H         LINE#         135
+  C:0169H         LINE#         136
+  C:016CH         LINE#         137
+  C:0178H         LINE#         138
+  C:017CH         LINE#         140
+  C:017FH         LINE#         141
+  C:0182H         LINE#         142
+  C:0185H         LINE#         143
+  C:019AH         LINE#         144
+  C:01AAH         LINE#         145
+  C:01ACH         LINE#         146
+  C:01AEH         LINE#         147
+  C:01B2H         LINE#         148
+  C:01B8H         LINE#         149
+  C:01C2H         LINE#         150
+  C:01D7H         LINE#         151
+  C:01DEH         LINE#         152
+  C:01E1H         LINE#         153
+  C:01F6H         LINE#         154
+  C:0200H         LINE#         155
+  C:020AH         LINE#         156
+  C:021AH         LINE#         158
+  C:022CH         LINE#         159
+  C:022CH         LINE#         160
+  C:0232H         LINE#         161
+  C:0236H         LINE#         162
+  C:0236H         LINE#         163
+  C:023AH         LINE#         164
+  C:023CH         LINE#         165
   -------         ENDPROC       _SHOWTRACKSQUARE_DOWN
   -------         PROC          MAIN
   -------         DO            
   D:0008H         SYMBOL        i
   -------         ENDDO         
-  C:03BFH         LINE#         177
-  C:03BFH         LINE#         178
-  C:03BFH         LINE#         180
-  C:03CDH         LINE#         181
-  C:03D4H         LINE#         182
-  C:03D8H         LINE#         183
-BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  04/19/2019  23:19:17  PAGE 11
+  C:0560H         LINE#         171
+  C:0560H         LINE#         172
+  C:0560H         LINE#         174
+  C:056EH         LINE#         175
+  C:0581H         LINE#         176
+  C:0594H         LINE#         177
+  C:0598H         LINE#         180
+  C:05A2H         LINE#         181
+  C:05ACH         LINE#         183
+  C:05AFH         LINE#         184
+  C:05B1H         LINE#         188
+  C:05B3H         LINE#         189
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  04/20/2019  19:42:33  PAGE 11
 
 
-  C:03E6H         LINE#         184
-  C:03FAH         LINE#         185
-  C:040BH         LINE#         186
-  C:040FH         LINE#         187
-  C:0417H         LINE#         188
-  C:041AH         LINE#         189
-  C:041CH         LINE#         190
-  C:0422H         LINE#         193
-  C:0429H         LINE#         194
-  C:0429H         LINE#         195
-  C:0430H         LINE#         196
-  C:043CH         LINE#         197
-  C:0443H         LINE#         198
-  C:0445H         LINE#         199
-  C:0445H         LINE#         200
-  C:0453H         LINE#         201
-  C:045EH         LINE#         202
-  C:046CH         LINE#         203
-  C:0494H         LINE#         204
-  C:0494H         LINE#         205
-  C:0496H         LINE#         206
+  C:05B3H         LINE#         190
+  C:05BAH         LINE#         191
+  C:05C6H         LINE#         192
+  C:05CDH         LINE#         193
+  C:05CFH         LINE#         194
+  C:05CFH         LINE#         195
+  C:05DDH         LINE#         196
+  C:0605H         LINE#         197
+  C:0605H         LINE#         198
+  C:0607H         LINE#         199
+  C:060EH         LINE#         200
   -------         ENDPROC       MAIN
   -------         ENDMOD        ST7735_TFT
 
   -------         MODULE        ?C?CLDPTR
-  C:08C8H         PUBLIC        ?C?CLDPTR
+  C:08AAH         PUBLIC        ?C?CLDPTR
   -------         ENDMOD        ?C?CLDPTR
+
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_LCD_CLEAR?ST7735_TFT
 
 *** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
     SEGMENT: ?PR?_FILLRECTANGLE?ST7735_TFT
@@ -636,5 +629,5 @@ SYMBOL TABLE OF MODULE:  .\Objects\Lcd_ST7735 (ST7735_TFT)
 *** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
     SEGMENT: ?PR?_PRINT_TETRIS?ST7735_TFT
 
-Program Size: data=76.0 xdata=80 code=2353
-LINK/LOCATE RUN COMPLETE.  2 WARNING(S),  0 ERROR(S)
+Program Size: data=79.0 xdata=80 code=2323
+LINK/LOCATE RUN COMPLETE.  3 WARNING(S),  0 ERROR(S)
