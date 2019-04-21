@@ -6,9 +6,18 @@ unsigned int xdata Area[20];
 unsigned int xdata groundx[20];
 unsigned char data trackSquare[6];
 unsigned char data tetris[5] = {0x00,0x0c,0x08,0x8,0};       //低四位存行数据
-
-unsigned char square_x = 6, square_y = 9;
-
+unsigned char count = 1, Down_Flag = 0, Move_flag = 0;
+unsigned char square_x = 6, square_y = 0;
+unsigned int code tetrisData[6][4] = {
+  {0x0c88,0x08e0,0x0226,0x0e20},
+  {0x06c0,0x08c4,0x06c0,0x08c4},
+  {0x0c60,0x04c8,0x0c60,0x04c8},
+  {0x088c,0x02e0,0x0622,0x0e80},
+  {0x0e40,0x0464,0x04e0,0x04c4},
+  {0x0660,0x0660,0x0660,0x0660}
+}
+sbit Left = P1^3;
+sbit Right = P1^2;
 void fillRectangle(unsigned char x, unsigned char y, unsigned char w, unsigned char h, unsigned int color){
   if((x >= TFT_Width) || (y >= TFT_Height))
     return;
@@ -114,7 +123,7 @@ unsigned char showTrackSquare_Down(unsigned char x, unsigned char y, unsigned ch
       row = tetris[i] << 1;
       if(tetris[i+1] & trackSquare[4-i] >> 1){    //tracksquare 低6位中间4位保存数据，而teteris低四位保存数据， 右移一位
         tetris_Storage(x,y,temptrack);
-        square_y = 8;
+        square_y = 0;
         square_x = 3;
         return 1;
       }
@@ -126,15 +135,15 @@ unsigned char showTrackSquare_Down(unsigned char x, unsigned char y, unsigned ch
         row = tetris[i] << 2;
         if(tetris[i] & trackSquare[4-i] >> 2)
           return 1;
-        trackSquare[5-i] |= row;
+        trackSquare[4-i] |= row;
       }
     else
       if(direction == 2)                          //右移
         for(i = 0; i < 4; i++){
           row = tetris[i];
-          if(tetris[i+1] & trackSquare[4-i] >> 1)
+          if(tetris[i] & trackSquare[4-i])
             return 1;
-          trackSquare[5-i] |= row;
+          trackSquare[4-i] |= row;
         }
       else
         return 1;
@@ -171,14 +180,21 @@ unsigned char showTrackSquare_Down(unsigned char x, unsigned char y, unsigned ch
 void main(void)
 {
   unsigned char i;
+  PT0 = 1;
+  TMOD = 0x01;
+  TH0 = 0x3C;
+  TL0 = 0xB0;
+  EA = 1;
+  ET0 = 1;
+  TR0 = 1;
+  P1 = 0x0f;
   for(i = 0; i < 20; i++){
     groundx[i] = 0xc000;
     Area[i]=0xc000;
   }
 
-
-  groundx[18] = 0x0f7f;
-  Area[18] = 0x0f7f;
+  groundx[19] = 0xffff;
+  Area[19] = 0xffff;
   //Area[19] = 0xffff;
   lcd_initial(); //液晶屏初始化
   bl=1;//背光采用IO控制，也可以直接接到高电平常亮
@@ -186,21 +202,60 @@ void main(void)
 
   //print_Tetris(square_x+1,6,0x88c0,YELLOW);
   delay(500);
-  while(1){
-    trackSquare_Read(square_x,square_y);
-    if(!showTrackSquare_Down(square_x, square_y, 1 )){
-      trackSquare_Write(square_x,square_y);
-    }
-    else{
-      for(i = 0; i < 20; i++)
-        Area[i]=groundx[i];
-    }
-    square_x--;
-    delay(500);
-  }
+  trackSquare_Read(square_x,square_y);
+
   while(1)
   {
-	delay(500);
-   }
+    if(Down_Flag){
+      trackSquare_Read(square_x,square_y);
+      if(!showTrackSquare_Down(square_x, square_y, 0)){
+        trackSquare_Write(square_x,square_y);
+      }
+      else{
+        for(i = 0; i < 20; i++)
+        Area[i]=groundx[i];
+      }
+      square_y++;
+      Down_Flag = 0;
+    }
+    if(!Left && Move_flag){
+      delay(20);
+      if(!Left){
+        trackSquare_Read(square_x,square_y);
+        if(!showTrackSquare_Down(square_x, square_y, 1)){
+          trackSquare_Write(square_x,square_y);
+          square_x--;
+        }
+      }
+    }
+    if(!Right && Move_flag){
+      delay(20);
+      if(!Right){
+        trackSquare_Read(square_x,square_y);
+        if(!showTrackSquare_Down(square_x, square_y, 2)){
+          trackSquare_Write(square_x,square_y);
+          square_x++;
+        }
+      }
+    }
+  }
 
+}
+
+void Timer0() interrupt 1
+{
+  TH0 = 0x3C;
+  TL0 = 0xB0;
+  EA = 0;
+  count++;
+  if(count <= 24)
+    Move_flag = 1;
+  else
+    Move_flag = 0;
+
+  if(count >= 30){          //定时1.5s
+    count = 0;
+    Down_Flag = 1;
+  }
+  EA = 1;
 }

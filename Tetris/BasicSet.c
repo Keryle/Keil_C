@@ -58,12 +58,12 @@
 //主频：12MHZ
 //---------------------------液晶屏接线说明-------------------------------------//
 //接线前请参考液晶屏说明书第10页引脚定义
-sbit bl        =P1^5;//接模块BL引脚，背光可以采用IO控制或者PWM控制，也可以直接接到高电平常亮
-sbit scl       =P1^0;//接模块CLK引脚,接裸屏Pin9_SCL
-sbit sda       =P1^1;//接模块DIN/MOSI引脚，接裸屏Pin8_SDA
-sbit rs        =P1^3;//接模块D/C引脚，接裸屏Pin7_A0
-sbit cs        =P1^4;//接模块CE引脚，接裸屏Pin12_CS
-sbit reset     =P1^2;//接模块RST引脚，接裸屏Pin6_RES
+sbit bl        =P2^5;//接模块BL引脚，背光可以采用IO控制或者PWM控制，也可以直接接到高电平常亮
+sbit scl       =P2^0;//接模块CLK引脚,接裸屏Pin9_SCL
+sbit sda       =P2^1;//接模块DIN/MOSI引脚，接裸屏Pin8_SDA
+sbit rs        =P2^3;//接模块D/C引脚，接裸屏Pin7_A0
+sbit cs        =P2^4;//接模块CE引脚，接裸屏Pin12_CS
+sbit reset     =P2^2;//接模块RST引脚，接裸屏Pin6_RES
 //---------------------------End of液晶屏接线---------------------------------//
 
 
