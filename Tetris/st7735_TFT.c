@@ -5,9 +5,9 @@
 unsigned int xdata Area[20];
 unsigned int xdata groundx[20];
 unsigned char data trackSquare[6];
-unsigned char data tetris[5] = {0x00,0x0c,0x08,0x8,0};       //低四位存行数据
+unsigned char data tetris[5] = {0x00,0x06,0x04,0x04,0};       //低四位存行数据
 unsigned char count = 1, Down_Flag = 0, Move_flag = 0;
-unsigned char square_x = 6, square_y = 0;
+unsigned char square_x = 6, square_y = 0, rotate = 0;
 unsigned int code tetrisData[6][4] = {
   {0x0c88,0x08e0,0x0226,0x0e20},
   {0x06c0,0x08c4,0x06c0,0x08c4},
@@ -15,9 +15,11 @@ unsigned int code tetrisData[6][4] = {
   {0x088c,0x02e0,0x0622,0x0e80},
   {0x0e40,0x0464,0x04e0,0x04c4},
   {0x0660,0x0660,0x0660,0x0660}
-}
+};
+unsigned int code *pTetris = tetrisData[0];
 sbit Left = P1^3;
 sbit Right = P1^2;
+sbit Rota = P1^1;
 void fillRectangle(unsigned char x, unsigned char y, unsigned char w, unsigned char h, unsigned int color){
   if((x >= TFT_Width) || (y >= TFT_Height))
     return;
@@ -66,7 +68,7 @@ void trackSquare_Read(unsigned char x, unsigned char y){
   unsigned char i;
   p += y;           //数据开始行
   for(i = 0; i < 6; i++){
-    trackSquare[i] = (*p >> (9-x)) & 0x3f; //取出6位数据，右移 14-6+1-x=9-x
+    trackSquare[i] = (*p >> (9-x)); //取出6位数据，右移 14-6+1-x=9-x
     p++;
   }
 }
@@ -96,13 +98,13 @@ void tetris_Storage(unsigned char x, unsigned char y, unsigned char *p){
     p++;
     pgroundx++;
   }
-  a = 0x8000;
+/*  a = 0x8000;
   for(i = 0; i < 16;i++){
     if(groundx[16] & a)
       fillPoint(i, 0, RED);
     a >>= 1;
   }
-
+*/
 }
 
 //Show trackSquare
@@ -112,6 +114,7 @@ unsigned char showTrackSquare_Down(unsigned char x, unsigned char y, unsigned ch
   unsigned char data *pTrack =trackSquare;
   unsigned char data *pTemp = temptrack;
   unsigned char row;
+  unsigned int  row_int;
   for(i = 0; i < 6; i++)
     temptrack[i] = *pTrack++;
 
@@ -146,7 +149,31 @@ unsigned char showTrackSquare_Down(unsigned char x, unsigned char y, unsigned ch
           trackSquare[4-i] |= row;
         }
       else
-        return 1;
+        if(direction == 3){                     //旋转
+          row_int = *(pTetris + rotate);
+          rotate++;
+          if(rotate > 3)
+            rotate = 0;
+          for(i = 0; i < 4; i++){
+            tetris[3-i] = row_int & 0x0f;
+            row_int >>= 4;
+          }                                     //写入tetris
+          for(i = 0; i < 4; i++){
+            row = tetris[i] << 1;
+            if(tetris[i] & trackSquare[4-i] >> 1){   //判断是否可以旋转
+              rotate--;
+              row_int = *(pTetris + rotate);
+              for(i = 0; i < 4; i++){
+                tetris[3-i] = row_int & 0x0f;
+                row_int >>= 4;
+              }
+              return 1;
+            }
+            trackSquare[4-i] |= row;
+          }
+        }
+        else
+          return 1;
   pTemp = &temptrack[0];
   pTrack = trackSquare;
   for(i = 0; i < 6; i++){
@@ -154,8 +181,7 @@ unsigned char showTrackSquare_Down(unsigned char x, unsigned char y, unsigned ch
     pTrack++;
     pTemp++;                            //异或得到改变位存入aa
   }
-  if(aa[1] == 0x20)
-  fillPoint(2,2,RED);
+
   for(i = 0; i < 6; i++){                 //逐行扫描
     if(aa[i]){                           //异或值为真，改变颜色
       row = 0x20;
@@ -186,11 +212,11 @@ void main(void)
   TL0 = 0xB0;
   EA = 1;
   ET0 = 1;
-  TR0 = 1;
-  P1 = 0x0f;
+  TR0 = 1;                  //打开定时器0，定时50ms
+  P1 = 0x0f;                //矩阵键盘接P1口，赋初值
   for(i = 0; i < 20; i++){
-    groundx[i] = 0xc000;
-    Area[i]=0xc000;
+    groundx[i] = 0xc007;
+    Area[i]=0xc007;
   }
 
   groundx[19] = 0xffff;
@@ -206,21 +232,21 @@ void main(void)
 
   while(1)
   {
-    if(Down_Flag){
-      trackSquare_Read(square_x,square_y);
-      if(!showTrackSquare_Down(square_x, square_y, 0)){
-        trackSquare_Write(square_x,square_y);
+    if(Down_Flag){                                      //downflag定时器T0计时1.5s触发置位，方块下降
+      trackSquare_Read(square_x,square_y);              //读取追踪区域数据到Tracksquare
+      if(!showTrackSquare_Down(square_x, square_y, 0)){ //判断是否触底，触底则不写入追踪数据，由该函数将数据写入背景区域
+        trackSquare_Write(square_x,square_y);           //没有触底，Tracksquare数据写入追踪区域
+        square_y++;                   //下移一格
       }
       else{
         for(i = 0; i < 20; i++)
-        Area[i]=groundx[i];
+        Area[i]=groundx[i];         //同步数据
       }
-      square_y++;
-      Down_Flag = 0;
+      Down_Flag = 0;                //清除下降标志
     }
-    if(!Left && Move_flag){
+    if(!Left && Move_flag){         //左移判断，同时判断是否允许移动操作，moveflag由T0控制
       delay(20);
-      if(!Left){
+      if(!Left){                    //延时消抖，再次判断
         trackSquare_Read(square_x,square_y);
         if(!showTrackSquare_Down(square_x, square_y, 1)){
           trackSquare_Write(square_x,square_y);
@@ -228,7 +254,7 @@ void main(void)
         }
       }
     }
-    if(!Right && Move_flag){
+    if(!Right && Move_flag){        //右移判断
       delay(20);
       if(!Right){
         trackSquare_Read(square_x,square_y);
@@ -238,6 +264,14 @@ void main(void)
         }
       }
     }
+    if(!Rota && Move_flag){        //旋转判断
+      delay(20);
+      if(!Rota){
+        trackSquare_Read(square_x,square_y);
+        if(!showTrackSquare_Down(square_x, square_y, 3))
+          trackSquare_Write(square_x,square_y);
+      }
+    }
   }
 
 }
@@ -245,10 +279,9 @@ void main(void)
 void Timer0() interrupt 1
 {
   TH0 = 0x3C;
-  TL0 = 0xB0;
-  EA = 0;
+  TL0 = 0xB0;                //定时50ms
   count++;
-  if(count <= 24)
+  if(count <= 22)           //前22*50=1.1s可以进行左右移动操作
     Move_flag = 1;
   else
     Move_flag = 0;
@@ -257,5 +290,4 @@ void Timer0() interrupt 1
     count = 0;
     Down_Flag = 1;
   }
-  EA = 1;
 }
