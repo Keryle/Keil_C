@@ -20,6 +20,7 @@ unsigned int code *pTetris = tetrisData[0];
 sbit Left = P1^3;
 sbit Right = P1^2;
 sbit Rota = P1^1;
+sbit fast = P1^0;
 void fillRectangle(unsigned char x, unsigned char y, unsigned char w, unsigned char h, unsigned int color){
   if((x >= TFT_Width) || (y >= TFT_Height))
     return;
@@ -271,6 +272,11 @@ void main(void)
         if(!showTrackSquare_Down(square_x, square_y, 3))
           trackSquare_Write(square_x,square_y);
       }
+    }
+    if(!fast){
+      delay(20);
+      if(!fast)
+        Down_Flag = 1;
     }
   }
 
