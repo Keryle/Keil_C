@@ -194,7 +194,7 @@ unsigned char showTrackSquare_Down(unsigned char x, unsigned char y, unsigned ch
   return 0;
 }
 
-//һ����������
+//消除行函数
 void tetris_Clear(void)
 {
   unsigned int xdata *pRead = groundx;
