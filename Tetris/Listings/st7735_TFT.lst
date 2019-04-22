@@ -1,4 +1,4 @@
-C51 COMPILER V9.59.0.0   ST7735_TFT                                                        04/22/2019 13:47:36 PAGE 1   
+C51 COMPILER V9.59.0.0   ST7735_TFT                                                        04/22/2019 16:10:15 PAGE 1   
 
 
 C51 COMPILER V9.59.0.0, COMPILATION OF MODULE ST7735_TFT
@@ -12,13 +12,13 @@ line level    source
    2          #define TFT_Width       128
    3          #define TFT_Height      160
    4          
-   5          unsigned int xdata Area[20];
-   6          unsigned int xdata groundx[20];
-   7          unsigned char data trackSquare[6];
+   5          unsigned int xdata Area[20];          //×·×Ù±³¾°
+   6          unsigned int xdata groundx[20];       //±³¾°
+   7          unsigned char data trackSquare[6];    //×·×ÙÇøÓò
    8          unsigned char data tetris[5] = {0x00,0x06,0x04,0x04,0};       //µÍËÄÎ»´æÐÐÊý¾Ý
-   9          unsigned char count = 1, Down_Flag = 0, Move_flag = 0;
-  10          unsigned char square_x = 6, square_y = 0, rotate = 0;
-  11          unsigned int code tetrisData[6][4] = {
+   9          unsigned char count = 1, Down_Flag = 0, Move_flag = 0;        //¶¨Ê±Æ÷T0¼ÆÊýÎ»£¬ÏÂ½µºÍÒÆ¶¯±êÖ¾
+  10          unsigned char square_x = 3, square_y = 0, rotate = 0;         //³õÊ¼Î»ÖÃ£¬Ðý×ªÎ»ÖÃ
+  11          unsigned int code tetrisData[6][4] = {                        //·½¿éÊý¾Ý
   12            {0x0c88,0x08e0,0x0226,0x0e20},
   13            {0x06c0,0x08c4,0x06c0,0x08c4},
   14            {0x0c60,0x04c8,0x0c60,0x04c8},
@@ -26,10 +26,10 @@ line level    source
   16            {0x0e40,0x0464,0x04e0,0x04c4},
   17            {0x0660,0x0660,0x0660,0x0660}
   18          };
-  19          unsigned int code *pTetris = tetrisData[0];
-  20          unsigned int code *PTimer;
-  21          unsigned char tcount = 0;
-  22          sbit Left = P1^3;
+  19          unsigned int code *pTetris = tetrisData[0];    //·½¿éÖ¸Õë
+  20          unsigned int code *PTimer;    //Ëæ»úÖ¸Õë
+  21          unsigned char tcount = 0;     //T1¼ÆÊýÎ»
+  22          sbit Left = P1^3;             //°´¼ü
   23          sbit Right = P1^2;
   24          sbit Rota = P1^1;
   25          sbit fast = P1^0;
@@ -62,7 +62,7 @@ line level    source
   51          //¸ßÎ»Îª1´ú±í×óÇ½±Ú£¬µÍÈýÎ»ÖÃ1´ú±íÓÒÇ½±Ú
   52          /*  Ç½    1  2  3  4  5  6  7  8  9  10 11   Ç½14
   53              11 |  x  x  x  x  x  x  x  x  x  x  x  | 111      0xc007
-C51 COMPILER V9.59.0.0   ST7735_TFT                                                        04/22/2019 13:47:36 PAGE 2   
+C51 COMPILER V9.59.0.0   ST7735_TFT                                                        04/22/2019 16:10:15 PAGE 2   
 
   54          */
   55          void trackSquare_Read(unsigned char x, unsigned char y){
@@ -126,7 +126,7 @@ line level    source
  113   1      
  114   1        if(direction == 0)                               //ÏÂ½µ
  115   1          for(i = 0; i < 4; i++){
-C51 COMPILER V9.59.0.0   ST7735_TFT                                                        04/22/2019 13:47:36 PAGE 3   
+C51 COMPILER V9.59.0.0   ST7735_TFT                                                        04/22/2019 16:10:15 PAGE 3   
 
  116   2            row = tetris[i] << 1;
  117   2            if(tetris[i+1] & trackSquare[4-i] >> 1){    //tracksquare µÍ6Î»ÖÐ¼ä4Î»±£´æÊý¾Ý£¬¶øteterisµÍËÄÎ»±£´æÊ
@@ -172,11 +172,11 @@ line level    source
  156   3                }
  157   2                for(i = 0; i < 4; i++){
  158   3                  row = tetris[i] << 1;
- 159   3                  if(tetris[i] & trackSquare[4-i] >> 1){   //ÅÐ¶ÏÊÇ·ñ¿ÉÒÔÐý×ª£¬¶ÔÓ¦ÐÐÏàÓë
+ 159   3                  if(tetris[i] & trackSquare[4-i] >> 1){ //ÅÐ¶ÏÊÇ·ñ¿ÉÒÔÐý×ª£¬¶ÔÓ¦ÐÐÏàÓë
  160   4                    rotate--;
  161   4                    row_int = *(pTetris + rotate);
  162   4                    for(i = 0; i < 4; i++){
- 163   5                      tetris[3-i] = row_int & 0x0f;        //ÓëÖµÎªÕæ·µ»ØÇ°Ò»´ÎµÄÊý¾Ý
+ 163   5                      tetris[3-i] = row_int & 0x0f;      //ÓëÖµÎªÕæ·µ»ØÇ°Ò»´ÎµÄÊý¾Ý
  164   5                      row_int >>= 4;
  165   5                    }
  166   4                    return 1;
@@ -190,18 +190,18 @@ line level    source
  174   1        pTrack = trackSquare;
  175   1        for(i = 0; i < 6; i++){
  176   2          aa[i] = *pTrack ^ *pTemp;
-C51 COMPILER V9.59.0.0   ST7735_TFT                                                        04/22/2019 13:47:36 PAGE 4   
+C51 COMPILER V9.59.0.0   ST7735_TFT                                                        04/22/2019 16:10:15 PAGE 4   
 
  177   2          pTrack++;
- 178   2          pTemp++;                            //Òì»òµÃµ½¸Ä±äÎ»´æÈëaa
+ 178   2          pTemp++;                               //Òì»òµÃµ½¸Ä±äÎ»´æÈëaa
  179   2        }
  180   1      
  181   1        for(i = 0; i < 6; i++){                 //ÖðÐÐÉ¨Ãè
- 182   2          if(aa[i]){                           //Òì»òÖµÎªÕæ£¬¸Ä±äÑÕÉ«
+ 182   2          if(aa[i]){                            //Òì»òÖµÎªÕæ£¬¸Ä±äÑÕÉ«
  183   3            row = 0x20;
  184   3            for(j = 0; j < 6; j++){             //ÐÐÄÚÉ¨Ãè
  185   4              if(aa[i] & row ){                 //°´Î»ÅÐ¶Ï
- 186   5                if(temptrack[i] & row)        //Ô­À´µÄÖµÎªÕæ£¬¸Ä³É±³¾°É«£¨ºÚÉ«£©£¬·ñÔòÌî³äÑÕÉ«
+ 186   5                if(temptrack[i] & row)          //Ô­À´µÄÖµÎªÕæ£¬¸Ä³É±³¾°É«£¨ºÚÉ«£©£¬·ñÔòÌî³äÑÕÉ«
  187   5                  fillPoint(x+j+1,y+i,BLACK);
  188   5                else
  189   5                  fillPoint(x+j+1,y+i,RED);
@@ -213,129 +213,177 @@ line level    source
  195   1        return 0;
  196   1      }
  197          
- 198          
- 199          //ÓÎÏ·½çÃæ12X20£¬ÓÃÒ»¸ö16Î»Êý¾Ý±£´æÒ»ÐÐ£¬¸ß4Î»ÎÞÐ§£¬¹²20ÐÐ£¬20¸öÊý¾Ý
- 200          
- 201          
- 202          void main(void)
- 203          {
- 204   1        unsigned char i;
- 205   1        PT0 = 1;
- 206   1        TMOD = 0x11;
- 207   1        TH0 = 0x3C;
- 208   1        TL0 = 0xB0;
- 209   1        TH1 = 0xa6;
- 210   1        TL1 = 0x28;
- 211   1        EA = 1;
- 212   1        ET0 = 1;
- 213   1        ET1 = 1;
- 214   1        TR0 = 1;                  //´ò¿ª¶¨Ê±Æ÷0£¬¶¨Ê±50ms
- 215   1        TR1 = 1;                  //´ò¿ªT0£¬¶¨Ê±23ms
- 216   1        P1 = 0x0f;                //¾ØÕó¼üÅÌ½ÓP1¿Ú£¬¸³³õÖµ
- 217   1        for(i = 0; i < 20; i++){  //×óÓÒ±ß½ç
- 218   2          groundx[i] = 0xc007;
- 219   2          Area[i]=0xc007;
- 220   2        }
- 221   1        groundx[19] = 0xffff;     //ÏÂ±ß½ç
- 222   1        Area[19] = 0xffff;
- 223   1      
- 224   1        lcd_initial();            //Òº¾§ÆÁ³õÊ¼»¯
- 225   1        bl=1;                     //±³¹â²ÉÓÃIO¿ØÖÆ£¬Ò²¿ÉÒÔÖ±½Ó½Óµ½¸ßµçÆ½³£ÁÁ
- 226   1        //LCD_Clear(BLACK);       //ºÚÉ«
- 227   1      
- 228   1        delay(500);
- 229   1        trackSquare_Read(square_x,square_y);
- 230   1      
- 231   1        while(1)
- 232   1        {
- 233   2          if(Down_Flag){                                      //downflag¶¨Ê±Æ÷T0¼ÆÊ±1.5s´¥·¢ÖÃÎ»£¬·½¿éÏÂ½µ
- 234   3            trackSquare_Read(square_x,square_y);              //¶ÁÈ¡×·×ÙÇøÓòÊý¾Ýµ½Tracksquare
- 235   3            if(!showTrackSquare_Down(square_x, square_y, 0)){ //ÅÐ¶ÏÊÇ·ñ´¥µ×£¬´¥µ×Ôò²»Ð´Èë×·×ÙÊý¾Ý£¬ÓÉ¸Ãº¯Êý½«Êý
-             -¾ÝÐ´Èë±³¾°ÇøÓò
- 236   4              trackSquare_Write(square_x,square_y);           //Ã»ÓÐ´¥µ×£¬TracksquareÊý¾ÝÐ´Èë×·×ÙÇøÓò
- 237   4              square_y++;                   //ÏÂÒÆÒ»¸ñ
-C51 COMPILER V9.59.0.0   ST7735_TFT                                                        04/22/2019 13:47:36 PAGE 5   
-
+ 198          //Ò»ÐÐÌîÂúÏû³ý
+ 199          void tetris_Clear(void)
+ 200          {
+ 201   1        unsigned int xdata *pRead = groundx;
+ 202   1        unsigned int xdata *pWrite;
+ 203   1        unsigned int xdata groundx_bak[20],aa[20];
+ 204   1        unsigned char i,co = 0;
+ 205   1        unsigned int row_int;
+ 206   1        for(i = 0; i < 20; i++)
+ 207   1          groundx_bak[i] = *pRead++;
+ 208   1        pRead = &groundx_bak[18];     //Ö¸Ïòµ¹ÊýµÚ2ÐÐ,¶ÁÈ¡bakÊý¾Ý
+ 209   1        pWrite = &groundx[18];        //Ö¸Ïòµ¹ÊýµÚ2ÐÐ£¬Ð´Èëgroundx
+ 210   1        for(i = 0; i < 18; i++){
+ 211   2          if(*pRead == 0xffff)
+ 212   2            pRead--;                  //Ìø¹ýÕâÒ»ÐÐ
+ 213   2          *pWrite = *pRead;           //Ð´ÈëÊý¾Ý
+ 214   2          if(*pRead == 0)
+ 215   2            *pWrite = 0;
+ 216   2          pRead--;
+ 217   2          pWrite--;
+ 218   2        }
+ 219   1        if(pRead == pWrite)
+ 220   1          return;                           //Ö¸ÏòµØÖ·ÏàÍ¬£¬·µ»Ø
+ 221   1        pRead = groundx;                    //Ïû³ý0xffffºóµÄÊý¾Ý
+ 222   1        pWrite = groundx_bak;
+ 223   1        for(i = 0; i < 20; i++)
+ 224   1          aa[i] = *pRead++ ^ *pWrite++;     //Òì»òÖµ´æÈëaa,pwrite
+ 225   1        pRead = groundx_bak;
+ 226   1        pWrite = aa;
+ 227   1        for(i = 0; i < 20; i++){            //ÐÐÉ¨Ãè
+ 228   2          if(*pWrite){                      //¿ÕÐÐÅÐ¶Ï
+ 229   3            row_int = 0x8000;
+ 230   3            for(co = 0; co < 20; co++){     //ÁÐÉ¨Ãè
+ 231   4              if(*pWrite & row_int){        //Òì»òÖµÎªÕæ£¬¸Ä±äÊý¾Ý
+ 232   5                if(*pRead & row_int)        //Ô­À´ÊÇ1¸Ä³ÉºÚÉ«£¬Ô­À´ÊÇ0¸Ä³ÉºìÉ«
+ 233   5                fillPoint(co, i, BLACK);
+ 234   5                else
+ 235   5                fillPoint(co, i, RED);
+ 236   5              }
+ 237   4            row_int >>= 1;
  238   4            }
- 239   3            else{
- 240   4              for(i = 0; i < 20; i++)
- 241   4              Area[i]=groundx[i];         //Í¬²½Êý¾Ý
- 242   4            }
- 243   3            Down_Flag = 0;                //Çå³ýÏÂ½µ±êÖ¾
- 244   3          }
- 245   2          if(!Left && Move_flag){         //×óÒÆÅÐ¶Ï£¬Í¬Ê±ÅÐ¶ÏÊÇ·ñÔÊÐíÒÆ¶¯²Ù×÷£¬moveflagÓÉT0¿ØÖÆ
- 246   3            delay(20);
- 247   3            if(!Left){                    //ÑÓÊ±Ïû¶¶£¬ÔÙ´ÎÅÐ¶Ï
- 248   4              trackSquare_Read(square_x,square_y);
- 249   4              if(!showTrackSquare_Down(square_x, square_y, 1)){
- 250   5                trackSquare_Write(square_x,square_y);
- 251   5                square_x--;
- 252   5              }
- 253   4            }
- 254   3          }
- 255   2          if(!Right && Move_flag){        //ÓÒÒÆÅÐ¶Ï
- 256   3            delay(20);
- 257   3            if(!Right){
- 258   4              trackSquare_Read(square_x,square_y);
- 259   4              if(!showTrackSquare_Down(square_x, square_y, 2)){
- 260   5                trackSquare_Write(square_x,square_y);
- 261   5                square_x++;
- 262   5              }
- 263   4            }
- 264   3          }
- 265   2          if(!Rota && Move_flag){        //Ðý×ªÅÐ¶Ï
- 266   3            delay(20);
- 267   3            if(!Rota){
- 268   4              trackSquare_Read(square_x,square_y);
- 269   4              if(!showTrackSquare_Down(square_x, square_y, 3))
- 270   4                trackSquare_Write(square_x,square_y);
- 271   4            }
- 272   3          }
- 273   2          if(!fast){                    //¼ÓËÙÏÂ½µ
- 274   3            delay(20);
- 275   3            if(!fast)
- 276   3              Down_Flag = 1;
- 277   3          }
- 278   2        }
- 279   1      
- 280   1      }
- 281          
- 282          void Timer0() interrupt 1
- 283          {
- 284   1        TH0 = 0x3C;
- 285   1        TL0 = 0xB0;                //¶¨Ê±50ms
- 286   1        count++;
- 287   1        if(count <= 22)           //Ç°22*50=1.1s¿ÉÒÔ½øÐÐ×óÓÒÒÆ¶¯²Ù×÷
- 288   1          Move_flag = 1;
- 289   1        else
- 290   1          Move_flag = 0;
- 291   1      
- 292   1        if(count >= 30){          //¶¨Ê±1.5s
- 293   2          count = 0;
- 294   2          Down_Flag = 1;
- 295   2        }
- 296   1      }
- 297          
- 298          void Timer1() interrupt 3
- 299          {
-C51 COMPILER V9.59.0.0   ST7735_TFT                                                        04/22/2019 13:47:36 PAGE 6   
+C51 COMPILER V9.59.0.0   ST7735_TFT                                                        04/22/2019 16:10:15 PAGE 5   
 
- 300   1        TH1 = 0xa6;
- 301   1        TL1 = 0x28;
- 302   1        if(tcount > 5)
- 303   1          tcount = 0;
- 304   1        PTimer = tetrisData[tcount];
- 305   1        tcount++;
- 306   1      }
+ 239   3          }
+ 240   2          pWrite++;
+ 241   2          pRead++;
+ 242   2        }
+ 243   1      }
+ 244          
+ 245          
+ 246          void main(void)
+ 247          {
+ 248   1        unsigned char i;
+ 249   1        PT0 = 1;
+ 250   1        TMOD = 0x11;
+ 251   1        TH0 = 0x3C;
+ 252   1        TL0 = 0xB0;
+ 253   1        TH1 = 0xa6;
+ 254   1        TL1 = 0x28;
+ 255   1        EA = 1;
+ 256   1        ET0 = 1;
+ 257   1        ET1 = 1;
+ 258   1        TR0 = 1;                  //´ò¿ª¶¨Ê±Æ÷0£¬¶¨Ê±50ms
+ 259   1        TR1 = 1;                  //´ò¿ªT1£¬¶¨Ê±23ms
+ 260   1        P1 = 0x0f;                //¾ØÕó¼üÅÌ½ÓP1¿Ú£¬¸³³õÖµ
+ 261   1        for(i = 0; i < 20; i++){  //×óÓÒ±ß½ç
+ 262   2          groundx[i] = 0xc007;
+ 263   2          Area[i]=0xc007;
+ 264   2        }
+ 265   1        groundx[19] = 0xffff;     //ÏÂ±ß½ç
+ 266   1        Area[19] = 0xffff;
+ 267   1        lcd_initial();            //Òº¾§ÆÁ³õÊ¼»¯
+ 268   1        bl=1;                     //±³¹â²ÉÓÃIO¿ØÖÆ£¬Ò²¿ÉÒÔÖ±½Ó½Óµ½¸ßµçÆ½³£ÁÁ
+ 269   1        //»æ³öÓÎÏ·ÇøÓò
+ 270   1        LCD_Clear(BLACK);         //ºÚÉ«±³¾°
+ 271   1        fillRectangle(0,0,16,160,BLUE);
+ 272   1        fillRectangle(0,152,128,8,BLUE);
+ 273   1        fillRectangle(104,0,24,160,BLUE);
+ 274   1        delay(500);
+ 275   1      
+ 276   1        while(1)
+ 277   1        {
+ 278   2          if(Down_Flag){                                      //downflag¶¨Ê±Æ÷T0¼ÆÊ±1.5s´¥·¢ÖÃÎ»£¬·½¿éÏÂ½µ
+ 279   3            trackSquare_Read(square_x,square_y);              //¶ÁÈ¡×·×ÙÇøÓòÊý¾Ýµ½Tracksquare
+ 280   3            if(!showTrackSquare_Down(square_x, square_y, 0)){ //ÅÐ¶ÏÊÇ·ñ´¥µ×£¬´¥µ×Ôò²»Ð´Èë×·×ÙÊý¾Ý£¬ÓÉ¸Ãº¯Êý½«Êý
+             -¾ÝÐ´Èë±³¾°ÇøÓò
+ 281   4              trackSquare_Write(square_x,square_y);           //Ã»ÓÐ´¥µ×£¬TracksquareÊý¾ÝÐ´Èë×·×ÙÇøÓò
+ 282   4              square_y++;                   //ÏÂÒÆÒ»¸ñ
+ 283   4            }
+ 284   3            else{
+ 285   4              tetris_Clear();             //Ïû³ý
+ 286   4              for(i = 0; i < 20; i++)
+ 287   4              Area[i]=groundx[i];         //Í¬²½Êý¾Ý
+ 288   4            }
+ 289   3            Down_Flag = 0;                //Çå³ýÏÂ½µ±êÖ¾
+ 290   3          }
+ 291   2          if(!Left && Move_flag){         //×óÒÆÅÐ¶Ï£¬Í¬Ê±ÅÐ¶ÏÊÇ·ñÔÊÐíÒÆ¶¯²Ù×÷£¬moveflagÓÉT0¿ØÖÆ
+ 292   3            delay(20);
+ 293   3            if(!Left){                    //ÑÓÊ±Ïû¶¶£¬ÔÙ´ÎÅÐ¶Ï
+ 294   4              trackSquare_Read(square_x,square_y);
+ 295   4              if(!showTrackSquare_Down(square_x, square_y, 1)){
+ 296   5                trackSquare_Write(square_x,square_y);
+ 297   5                square_x--;
+ 298   5              }
+ 299   4            }
+C51 COMPILER V9.59.0.0   ST7735_TFT                                                        04/22/2019 16:10:15 PAGE 6   
+
+ 300   3          }
+ 301   2          if(!Right && Move_flag){        //ÓÒÒÆÅÐ¶Ï
+ 302   3            delay(20);
+ 303   3            if(!Right){
+ 304   4              trackSquare_Read(square_x,square_y);
+ 305   4              if(!showTrackSquare_Down(square_x, square_y, 2)){
+ 306   5                trackSquare_Write(square_x,square_y);
+ 307   5                square_x++;
+ 308   5              }
+ 309   4            }
+ 310   3          }
+ 311   2          if(!Rota && Move_flag){        //Ðý×ªÅÐ¶Ï
+ 312   3            delay(20);
+ 313   3            if(!Rota){
+ 314   4              trackSquare_Read(square_x,square_y);
+ 315   4              if(!showTrackSquare_Down(square_x, square_y, 3))
+ 316   4                trackSquare_Write(square_x,square_y);
+ 317   4            }
+ 318   3          }
+ 319   2          if(!fast){                    //¼ÓËÙÏÂ½µ
+ 320   3            delay(20);
+ 321   3            if(!fast)
+ 322   3              Down_Flag = 1;
+ 323   3          }
+ 324   2        }
+ 325   1      
+ 326   1      }
+ 327          
+ 328          void Timer0() interrupt 1
+ 329          {
+ 330   1        TH0 = 0x3C;
+ 331   1        TL0 = 0xB0;                //¶¨Ê±50ms
+ 332   1        count++;
+ 333   1        if(count <= 22)           //Ç°22*50=1.1s¿ÉÒÔ½øÐÐ×óÓÒÒÆ¶¯²Ù×÷
+ 334   1          Move_flag = 1;
+ 335   1        else
+ 336   1          Move_flag = 0;
+ 337   1      
+ 338   1        if(count >= 30){          //¶¨Ê±1.5s
+ 339   2          count = 0;
+ 340   2          Down_Flag = 1;
+ 341   2        }
+ 342   1      }
+ 343          
+ 344          void Timer1() interrupt 3
+ 345          {
+ 346   1        TH1 = 0xa6;
+ 347   1        TL1 = 0x28;
+ 348   1        if(tcount > 5)
+ 349   1          tcount = 0;
+ 350   1        PTimer = tetrisData[tcount];
+ 351   1        tcount++;
+ 352   1      }
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =   2646    ----
+   CODE SIZE        =   3164    ----
    CONSTANT SIZE    =     48    ----
-   XDATA SIZE       =     80    ----
+   XDATA SIZE       =     80      80
    PDATA SIZE       =   ----    ----
-   DATA SIZE        =     22      56
+   DATA SIZE        =     22      64
    IDATA SIZE       =   ----    ----
+C51 COMPILER V9.59.0.0   ST7735_TFT                                                        04/22/2019 16:10:15 PAGE 7   
+
    BIT SIZE         =   ----    ----
 END OF MODULE INFORMATION.
 

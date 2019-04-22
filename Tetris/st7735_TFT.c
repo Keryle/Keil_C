@@ -2,13 +2,13 @@
 #define TFT_Width       128
 #define TFT_Height      160
 
-unsigned int xdata Area[20];
-unsigned int xdata groundx[20];
-unsigned char data trackSquare[6];
+unsigned int xdata Area[20];          //追踪背景
+unsigned int xdata groundx[20];       //背景
+unsigned char data trackSquare[6];    //追踪区域
 unsigned char data tetris[5] = {0x00,0x06,0x04,0x04,0};       //低四位存行数据
-unsigned char count = 1, Down_Flag = 0, Move_flag = 0;
-unsigned char square_x = 6, square_y = 0, rotate = 0;
-unsigned int code tetrisData[6][4] = {
+unsigned char count = 1, Down_Flag = 0, Move_flag = 0;        //定时器T0计数位，下降和移动标志
+unsigned char square_x = 3, square_y = 0, rotate = 0;         //初始位置，旋转位置
+unsigned int code tetrisData[6][4] = {                        //方块数据
   {0x0c88,0x08e0,0x0226,0x0e20},
   {0x06c0,0x08c4,0x06c0,0x08c4},
   {0x0c60,0x04c8,0x0c60,0x04c8},
@@ -16,10 +16,10 @@ unsigned int code tetrisData[6][4] = {
   {0x0e40,0x0464,0x04e0,0x04c4},
   {0x0660,0x0660,0x0660,0x0660}
 };
-unsigned int code *pTetris = tetrisData[0];
-unsigned int code *PTimer;
-unsigned char tcount = 0;
-sbit Left = P1^3;
+unsigned int code *pTetris = tetrisData[0];    //方块指针
+unsigned int code *PTimer;    //随机指针
+unsigned char tcount = 0;     //T1计数位
+sbit Left = P1^3;             //按键
 sbit Right = P1^2;
 sbit Rota = P1^1;
 sbit fast = P1^0;
@@ -156,11 +156,11 @@ unsigned char showTrackSquare_Down(unsigned char x, unsigned char y, unsigned ch
           }
           for(i = 0; i < 4; i++){
             row = tetris[i] << 1;
-            if(tetris[i] & trackSquare[4-i] >> 1){   //判断是否可以旋转，对应行相与
+            if(tetris[i] & trackSquare[4-i] >> 1){ //判断是否可以旋转，对应行相与
               rotate--;
               row_int = *(pTetris + rotate);
               for(i = 0; i < 4; i++){
-                tetris[3-i] = row_int & 0x0f;        //与值为真返回前一次的数据
+                tetris[3-i] = row_int & 0x0f;      //与值为真返回前一次的数据
                 row_int >>= 4;
               }
               return 1;
@@ -175,15 +175,15 @@ unsigned char showTrackSquare_Down(unsigned char x, unsigned char y, unsigned ch
   for(i = 0; i < 6; i++){
     aa[i] = *pTrack ^ *pTemp;
     pTrack++;
-    pTemp++;                            //异或得到改变位存入aa
+    pTemp++;                               //异或得到改变位存入aa
   }
 
   for(i = 0; i < 6; i++){                 //逐行扫描
-    if(aa[i]){                           //异或值为真，改变颜色
+    if(aa[i]){                            //异或值为真，改变颜色
       row = 0x20;
       for(j = 0; j < 6; j++){             //行内扫描
         if(aa[i] & row ){                 //按位判断
-          if(temptrack[i] & row)        //原来的值为真，改成背景色（黑色），否则填充颜色
+          if(temptrack[i] & row)          //原来的值为真，改成背景色（黑色），否则填充颜色
             fillPoint(x+j+1,y+i,BLACK);
           else
             fillPoint(x+j+1,y+i,RED);
@@ -195,8 +195,52 @@ unsigned char showTrackSquare_Down(unsigned char x, unsigned char y, unsigned ch
   return 0;
 }
 
-
-//游戏界面12X20，用一个16位数据保存一行，高4位无效，共20行，20个数据
+//一行填满消除
+void tetris_Clear(void)
+{
+  unsigned int xdata *pRead = groundx;
+  unsigned int xdata *pWrite;
+  unsigned int xdata groundx_bak[20],aa[20];
+  unsigned char i,co = 0;
+  unsigned int row_int;
+  for(i = 0; i < 20; i++)
+    groundx_bak[i] = *pRead++;
+  pRead = &groundx_bak[18];     //指向倒数第2行,读取bak数据
+  pWrite = &groundx[18];        //指向倒数第2行，写入groundx
+  for(i = 0; i < 18; i++){
+    if(*pRead == 0xffff)
+      pRead--;                  //跳过这一行
+    *pWrite = *pRead;           //写入数据
+    if(*pRead == 0)
+      *pWrite = 0;
+    pRead--;
+    pWrite--;
+  }
+  if(pRead == pWrite)
+    return;                           //指向地址相同，返回
+  pRead = groundx;                    //消除0xffff后的数据
+  pWrite = groundx_bak;
+  for(i = 0; i < 20; i++)
+    aa[i] = *pRead++ ^ *pWrite++;     //异或值存入aa,pwrite
+  pRead = groundx_bak;
+  pWrite = aa;
+  for(i = 0; i < 20; i++){            //行扫描
+    if(*pWrite){                      //空行判断
+      row_int = 0x8000;
+      for(co = 0; co < 20; co++){     //列扫描
+        if(*pWrite & row_int){        //异或值为真，改变数据
+          if(*pRead & row_int)        //原来是1改成黑色，原来是0改成红色
+          fillPoint(co, i, BLACK);
+          else
+          fillPoint(co, i, RED);
+        }
+      row_int >>= 1;
+      }
+    }
+    pWrite++;
+    pRead++;
+  }
+}
 
 
 void main(void)
@@ -212,7 +256,7 @@ void main(void)
   ET0 = 1;
   ET1 = 1;
   TR0 = 1;                  //打开定时器0，定时50ms
-  TR1 = 1;                  //打开T0，定时23ms
+  TR1 = 1;                  //打开T1，定时23ms
   P1 = 0x0f;                //矩阵键盘接P1口，赋初值
   for(i = 0; i < 20; i++){  //左右边界
     groundx[i] = 0xc007;
@@ -220,13 +264,14 @@ void main(void)
   }
   groundx[19] = 0xffff;     //下边界
   Area[19] = 0xffff;
-
   lcd_initial();            //液晶屏初始化
   bl=1;                     //背光采用IO控制，也可以直接接到高电平常亮
-  //LCD_Clear(BLACK);		    //黑色
-
+  //绘出游戏区域
+  LCD_Clear(BLACK);		      //黑色背景
+  fillRectangle(0,0,16,160,BLUE);
+  fillRectangle(0,152,128,8,BLUE);
+  fillRectangle(104,0,24,160,BLUE);
   delay(500);
-  trackSquare_Read(square_x,square_y);
 
   while(1)
   {
@@ -237,6 +282,7 @@ void main(void)
         square_y++;                   //下移一格
       }
       else{
+        tetris_Clear();             //消除
         for(i = 0; i < 20; i++)
         Area[i]=groundx[i];         //同步数据
       }
