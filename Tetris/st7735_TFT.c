@@ -2,13 +2,13 @@
 #define TFT_Width       128
 #define TFT_Height      160
 
-unsigned int xdata Area[20];          //×·×Ù±³¾°
-unsigned int xdata groundx[20];       //±³¾°
-unsigned char data trackSquare[6];    //×·×ÙÇøÓò
-unsigned char data tetris[5] = {0x00,0x06,0x04,0x04,0};       //µÍËÄÎ»´æÐÐÊý¾Ý
-unsigned char count = 1, Down_Flag = 0, Move_flag = 0;        //¶¨Ê±Æ÷T0¼ÆÊýÎ»£¬ÏÂ½µºÍÒÆ¶¯±êÖ¾
-unsigned char square_x = 3, square_y = 0, rotate = 0;         //³õÊ¼Î»ÖÃ£¬Ðý×ªÎ»ÖÃ
-unsigned int code tetrisData[6][4] = {                        //·½¿éÊý¾Ý
+unsigned int xdata Area[20];          //×·ï¿½Ù±ï¿½ï¿½ï¿½
+unsigned int xdata groundx[20];       //ï¿½ï¿½ï¿½ï¿½
+unsigned char data trackSquare[6];    //×·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+unsigned char data tetris[5] = {0x00,0x06,0x04,0x04,0};       //ï¿½ï¿½ï¿½ï¿½Î»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+unsigned char count = 1, Down_Flag = 0, Move_flag = 0;        //ï¿½ï¿½Ê±ï¿½ï¿½T0ï¿½ï¿½ï¿½ï¿½Î»ï¿½ï¿½ï¿½Â½ï¿½ï¿½ï¿½ï¿½Æ¶ï¿½ï¿½ï¿½Ö¾
+unsigned char square_x = 3, square_y = 0, rotate = 0;         //ï¿½ï¿½Ê¼Î»ï¿½Ã£ï¿½ï¿½ï¿½×ªÎ»ï¿½ï¿½
+unsigned int code tetrisData[6][4] = {                        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
   {0x0c88,0x08e0,0x0226,0x0e20},
   {0x06c0,0x08c4,0x06c0,0x08c4},
   {0x0c60,0x04c8,0x0c60,0x04c8},
@@ -16,10 +16,10 @@ unsigned int code tetrisData[6][4] = {                        //·½¿éÊý¾Ý
   {0x0e40,0x0464,0x04e0,0x04c4},
   {0x0660,0x0660,0x0660,0x0660}
 };
-unsigned int code *pTetris = tetrisData[0];    //·½¿éÖ¸Õë
-unsigned int code *PTimer;    //Ëæ»úÖ¸Õë
-unsigned char tcount = 0;     //T1¼ÆÊýÎ»
-sbit Left = P1^3;             //°´¼ü
+unsigned int code *pTetris = tetrisData[0];    //ï¿½ï¿½ï¿½ï¿½Ö¸ï¿½ï¿½
+unsigned int code *PTimer;    //ï¿½ï¿½ï¿½ï¿½Ö¸ï¿½ï¿½
+unsigned char tcount = 0;     //T1ï¿½ï¿½ï¿½ï¿½Î»
+sbit Left = P1^3;             //ï¿½ï¿½ï¿½ï¿½
 sbit Right = P1^2;
 sbit Rota = P1^1;
 sbit fast = P1^0;
@@ -47,17 +47,17 @@ void fillPoint(unsigned char x, unsigned char y, unsigned int color ) {
     Lcd_WriteData_16(color);
 }
 
-//Êý¾Ý´¢´æ½á¹¹£ºÒ»¸ö16Î»intÀàÐÍ´ú±íÒ»ÐÐ
-//¸ßÎ»Îª1´ú±í×óÇ½±Ú£¬µÍÈýÎ»ÖÃ1´ú±íÓÒÇ½±Ú
+//ï¿½ï¿½ï¿½Ý´ï¿½ï¿½ï¿½ï¿½á¹¹ï¿½ï¿½Ò»ï¿½ï¿½16Î»intï¿½ï¿½ï¿½Í´ï¿½ï¿½ï¿½Ò»ï¿½ï¿½
+//ï¿½ï¿½Î»Îª1ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç½ï¿½Ú£ï¿½ï¿½ï¿½ï¿½ï¿½Î»ï¿½ï¿½1ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç½ï¿½ï¿½
 /*  Ç½    1  2  3  4  5  6  7  8  9  10 11   Ç½14
     11 |  x  x  x  x  x  x  x  x  x  x  x  | 111      0xc007
 */
 void trackSquare_Read(unsigned char x, unsigned char y){
   unsigned int xdata *p = Area;
   unsigned char i;
-  p += y;           //Êý¾Ý¿ªÊ¼ÐÐ
+  p += y;           //ï¿½ï¿½ï¿½Ý¿ï¿½Ê¼ï¿½ï¿½
   for(i = 0; i < 6; i++){
-    trackSquare[i] = (*p >> (9-x)); //È¡³ö6Î»Êý¾Ý£¬ÓÒÒÆ 14-6+1-x=9-x
+    trackSquare[i] = (*p >> (9-x)); //È¡ï¿½ï¿½6Î»ï¿½ï¿½ï¿½Ý£ï¿½ï¿½ï¿½ï¿½ï¿½ 14-6+1-x=9-x
     p++;
   }
 }
@@ -65,13 +65,13 @@ void trackSquare_Read(unsigned char x, unsigned char y){
 void trackSquare_Write(unsigned char x, unsigned char y){
   unsigned int xdata *p = Area;
   unsigned char i;
-  unsigned int a, and = 0x003f;         //  µÍÁùÎ»ÖÃ1
+  unsigned int a, and = 0x003f;         //  ï¿½ï¿½ï¿½ï¿½Î»ï¿½ï¿½1
   p += y;
-  and <<= (9-x);                        //×óÒÆ¶ÔÎ»
+  and <<= (9-x);                        //ï¿½ï¿½ï¿½Æ¶ï¿½Î»
   for(i = 0; i < 6; i++ ){
     a = trackSquare[i] << (9-x);
-    *p &= ~and;                         //È¡·´ÏàÓë£¬Çå¿ÕAreaÖÐµÄtracksquareÇøÓò
-    *p |= a;                            //Óë ÐÂµÄÊý¾Ý
+    *p &= ~and;                         //È¡ï¿½ï¿½ï¿½ï¿½ï¿½ë£¬ï¿½ï¿½ï¿½ï¿½Areaï¿½Ðµï¿½tracksquareï¿½ï¿½ï¿½ï¿½
+    *p |= a;                            //ï¿½ï¿½ ï¿½Âµï¿½ï¿½ï¿½ï¿½ï¿½
     p++;
   }
 
@@ -82,9 +82,9 @@ void tetris_Storage(unsigned char x, unsigned char y, unsigned char *p){
   unsigned int a;
   pgroundx += (y);
   for(i = 0; i < 6; i++ ){
-    a = *p & 0x3f;                   //ÆÁ±Î¸ßÁ½Î»
+    a = *p & 0x3f;                   //ï¿½ï¿½ï¿½Î¸ï¿½ï¿½ï¿½Î»
     a <<= (9-x);
-    *pgroundx |= a;                  //Ð´ÈëÉÏÒ»´ÎtracksquareÖÐµÄÊý¾Ý
+    *pgroundx |= a;                  //Ð´ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½tracksquareï¿½Ðµï¿½ï¿½ï¿½ï¿½ï¿½
     p++;
     pgroundx++;
   }
@@ -106,30 +106,30 @@ unsigned char showTrackSquare_Down(unsigned char x, unsigned char y, unsigned ch
   unsigned char row;
   unsigned int  row_int;
   for(i = 0; i < 6; i++)
-    temptrack[i] = *pTrack++; //ÉÏ´Î¼ÇÂ¼Êý¾ÝÔÝ´æ
+    temptrack[i] = *pTrack++; //ï¿½Ï´Î¼ï¿½Â¼ï¿½ï¿½ï¿½ï¿½ï¿½Ý´ï¿½
 
   for(i = 0; i < 6; i++)
-    trackSquare[i] = groundx[y+i] >> (9-x) & 0x3f; //±³¾°Êý¾ÝÐ´Èëtracksquare
+    trackSquare[i] = groundx[y+i] >> (9-x) & 0x3f; //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð´ï¿½ï¿½tracksquare
 
-  if(direction == 0)                               //ÏÂ½µ
+  if(direction == 0)                               //ï¿½Â½ï¿½
     for(i = 0; i < 4; i++){
       row = tetris[i] << 1;
-      if(tetris[i+1] & trackSquare[4-i] >> 1){    //tracksquare µÍ6Î»ÖÐ¼ä4Î»±£´æÊý¾Ý£¬¶øteterisµÍËÄÎ»±£´æÊý¾Ý£¬ ÓÒÒÆÒ»Î»
-        tetris_Storage(x,y,temptrack);            //ÅÐ¶ÏÊÇ·ñ´¥µ×£¬TetrisµÚ1ÐÐÓëtracksquareµÚ4ÐÐ¶ÔÎ»ÅÐ¶Ï
-        square_y = 0;     //³õÊ¼»¯y×ø±ê
-        square_x = 3;     //³õÊ¼»¯x×ø±ê
-        pTetris = PTimer; //¶¨Ê±Æ÷Ëæ»úÖ¸Õë¸³Öµ¸øpTetris
+      if(tetris[i+1] & trackSquare[4-i] >> 1){    //tracksquare ï¿½ï¿½6Î»ï¿½Ð¼ï¿½4Î»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý£ï¿½ï¿½ï¿½teterisï¿½ï¿½ï¿½ï¿½Î»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý£ï¿½ ï¿½ï¿½ï¿½ï¿½Ò»Î»
+        tetris_Storage(x,y,temptrack);            //ï¿½Ð¶ï¿½ï¿½Ç·ñ´¥µ×£ï¿½Tetrisï¿½ï¿½1ï¿½ï¿½ï¿½ï¿½tracksquareï¿½ï¿½4ï¿½Ð¶ï¿½Î»ï¿½Ð¶ï¿½
+        square_y = 0;     //ï¿½ï¿½Ê¼ï¿½ï¿½yï¿½ï¿½ï¿½ï¿½
+        square_x = 3;     //ï¿½ï¿½Ê¼ï¿½ï¿½xï¿½ï¿½ï¿½ï¿½
+        pTetris = PTimer; //ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¸ï¿½ë¸³Öµï¿½ï¿½pTetris
         row_int = *pTetris;
         for(i = 0; i < 4; i++){
-          tetris[3-i] = row_int & 0x0f;            //ÆÁ±Î¸ßÎ»£¬½«Êý¾ÝÐ´Èëtetris
+          tetris[3-i] = row_int & 0x0f;            //ï¿½ï¿½ï¿½Î¸ï¿½Î»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð´ï¿½ï¿½tetris
           row_int >>= 4;
         }
         return 1;
       }
-      trackSquare[5-i] |= row;                     //trackÇøÓòÓë¶íÂÞË¹·½¿éÏà»ò,±£´æÕâ´ÎÒÆ¶¯²Ù×÷µÄÊý¾Ý
+      trackSquare[5-i] |= row;                     //trackï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ë¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½,ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     }
   else
-    if(direction == 1)                             //×óÒÆ
+    if(direction == 1)                             //ï¿½ï¿½ï¿½ï¿½
       for(i = 0; i < 4; i++){
         row = tetris[i] << 2;
         if(tetris[i] & trackSquare[4-i] >> 2)
@@ -137,7 +137,7 @@ unsigned char showTrackSquare_Down(unsigned char x, unsigned char y, unsigned ch
         trackSquare[4-i] |= row;
       }
     else
-      if(direction == 2)                           //ÓÒÒÆ
+      if(direction == 2)                           //ï¿½ï¿½ï¿½ï¿½
         for(i = 0; i < 4; i++){
           row = tetris[i];
           if(tetris[i] & trackSquare[4-i])
@@ -145,22 +145,22 @@ unsigned char showTrackSquare_Down(unsigned char x, unsigned char y, unsigned ch
           trackSquare[4-i] |= row;
         }
       else
-        if(direction == 3){                        //Ðý×ª
+        if(direction == 3){                        //ï¿½ï¿½×ª
           row_int = *(pTetris + rotate);
           rotate++;
           if(rotate > 3)
             rotate = 0;
           for(i = 0; i < 4; i++){
-            tetris[3-i] = row_int & 0x0f;          //ÆÁ±Î¸ßÎ»£¬½«Êý¾ÝÐ´Èëtetris
+            tetris[3-i] = row_int & 0x0f;          //ï¿½ï¿½ï¿½Î¸ï¿½Î»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð´ï¿½ï¿½tetris
             row_int >>= 4;
           }
           for(i = 0; i < 4; i++){
             row = tetris[i] << 1;
-            if(tetris[i] & trackSquare[4-i] >> 1){ //ÅÐ¶ÏÊÇ·ñ¿ÉÒÔÐý×ª£¬¶ÔÓ¦ÐÐÏàÓë
+            if(tetris[i] & trackSquare[4-i] >> 1){ //ï¿½Ð¶ï¿½ï¿½Ç·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×ªï¿½ï¿½ï¿½ï¿½Ó¦ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
               rotate--;
               row_int = *(pTetris + rotate);
               for(i = 0; i < 4; i++){
-                tetris[3-i] = row_int & 0x0f;      //ÓëÖµÎªÕæ·µ»ØÇ°Ò»´ÎµÄÊý¾Ý
+                tetris[3-i] = row_int & 0x0f;      //ï¿½ï¿½ÖµÎªï¿½æ·µï¿½ï¿½Ç°Ò»ï¿½Îµï¿½ï¿½ï¿½ï¿½ï¿½
                 row_int >>= 4;
               }
               return 1;
@@ -175,15 +175,15 @@ unsigned char showTrackSquare_Down(unsigned char x, unsigned char y, unsigned ch
   for(i = 0; i < 6; i++){
     aa[i] = *pTrack ^ *pTemp;
     pTrack++;
-    pTemp++;                               //Òì»òµÃµ½¸Ä±äÎ»´æÈëaa
+    pTemp++;                               //ï¿½ï¿½ï¿½ï¿½ï¿½Ãµï¿½ï¿½Ä±ï¿½Î»ï¿½ï¿½ï¿½ï¿½aa
   }
 
-  for(i = 0; i < 6; i++){                 //ÖðÐÐÉ¨Ãè
-    if(aa[i]){                            //Òì»òÖµÎªÕæ£¬¸Ä±äÑÕÉ«
+  for(i = 0; i < 6; i++){                 //ï¿½ï¿½ï¿½ï¿½É¨ï¿½ï¿½
+    if(aa[i]){                            //ï¿½ï¿½ï¿½ï¿½ÖµÎªï¿½æ£¬ï¿½Ä±ï¿½ï¿½ï¿½É«
       row = 0x20;
-      for(j = 0; j < 6; j++){             //ÐÐÄÚÉ¨Ãè
-        if(aa[i] & row ){                 //°´Î»ÅÐ¶Ï
-          if(temptrack[i] & row)          //Ô­À´µÄÖµÎªÕæ£¬¸Ä³É±³¾°É«£¨ºÚÉ«£©£¬·ñÔòÌî³äÑÕÉ«
+      for(j = 0; j < 6; j++){             //ï¿½ï¿½ï¿½ï¿½É¨ï¿½ï¿½
+        if(aa[i] & row ){                 //ï¿½ï¿½Î»ï¿½Ð¶ï¿½
+          if(temptrack[i] & row)          //Ô­ï¿½ï¿½ï¿½ï¿½ÖµÎªï¿½æ£¬ï¿½Ä³É±ï¿½ï¿½ï¿½É«ï¿½ï¿½ï¿½ï¿½É«ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É«
             fillPoint(x+j+1,y+i,BLACK);
           else
             fillPoint(x+j+1,y+i,RED);
@@ -195,7 +195,7 @@ unsigned char showTrackSquare_Down(unsigned char x, unsigned char y, unsigned ch
   return 0;
 }
 
-//Ò»ÐÐÌîÂúÏû³ý
+//Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 void tetris_Clear(void)
 {
   unsigned int xdata *pRead = groundx;
@@ -205,31 +205,31 @@ void tetris_Clear(void)
   unsigned int row_int;
   for(i = 0; i < 20; i++)
     groundx_bak[i] = *pRead++;
-  pRead = &groundx_bak[18];     //Ö¸Ïòµ¹ÊýµÚ2ÐÐ,¶ÁÈ¡bakÊý¾Ý
-  pWrite = &groundx[18];        //Ö¸Ïòµ¹ÊýµÚ2ÐÐ£¬Ð´Èëgroundx
+  pRead = &groundx_bak[18];     //Ö¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½2ï¿½ï¿½,ï¿½ï¿½È¡bakï¿½ï¿½ï¿½ï¿½
+  pWrite = &groundx[18];        //Ö¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½2ï¿½Ð£ï¿½Ð´ï¿½ï¿½groundx
   for(i = 0; i < 18; i++){
     if(*pRead == 0xffff)
-      pRead--;                  //Ìø¹ýÕâÒ»ÐÐ
-    *pWrite = *pRead;           //Ð´ÈëÊý¾Ý
+      pRead--;                  //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½
+    *pWrite = *pRead;           //Ð´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     if(*pRead == 0)
       *pWrite = 0;
     pRead--;
     pWrite--;
   }
   if(pRead == pWrite)
-    return;                           //Ö¸ÏòµØÖ·ÏàÍ¬£¬·µ»Ø
-  pRead = groundx;                    //Ïû³ý0xffffºóµÄÊý¾Ý
+    return;                           //Ö¸ï¿½ï¿½ï¿½ï¿½Ö·ï¿½ï¿½Í¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+  pRead = groundx;                    //ï¿½ï¿½ï¿½ï¿½0xffffï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
   pWrite = groundx_bak;
   for(i = 0; i < 20; i++)
-    aa[i] = *pRead++ ^ *pWrite++;     //Òì»òÖµ´æÈëaa,pwrite
+    aa[i] = *pRead++ ^ *pWrite++;     //ï¿½ï¿½ï¿½ï¿½Öµï¿½ï¿½ï¿½ï¿½aa,pwrite
   pRead = groundx_bak;
   pWrite = aa;
-  for(i = 0; i < 20; i++){            //ÐÐÉ¨Ãè
-    if(*pWrite){                      //¿ÕÐÐÅÐ¶Ï
+  for(i = 0; i < 20; i++){            //ï¿½ï¿½É¨ï¿½ï¿½
+    if(*pWrite){                      //ï¿½ï¿½ï¿½ï¿½ï¿½Ð¶ï¿½
       row_int = 0x8000;
-      for(co = 0; co < 20; co++){     //ÁÐÉ¨Ãè
-        if(*pWrite & row_int){        //Òì»òÖµÎªÕæ£¬¸Ä±äÊý¾Ý
-          if(*pRead & row_int)        //Ô­À´ÊÇ1¸Ä³ÉºÚÉ«£¬Ô­À´ÊÇ0¸Ä³ÉºìÉ«
+      for(co = 0; co < 20; co++){     //ï¿½ï¿½É¨ï¿½ï¿½
+        if(*pWrite & row_int){        //ï¿½ï¿½ï¿½ï¿½ÖµÎªï¿½æ£¬ï¿½Ä±ï¿½ï¿½ï¿½ï¿½ï¿½
+          if(*pRead & row_int)        //Ô­ï¿½ï¿½ï¿½ï¿½1ï¿½Ä³Éºï¿½É«ï¿½ï¿½Ô­ï¿½ï¿½ï¿½ï¿½0ï¿½Ä³Éºï¿½É«
           fillPoint(co, i, BLACK);
           else
           fillPoint(co, i, RED);
@@ -241,7 +241,6 @@ void tetris_Clear(void)
     pRead++;
   }
 }
-
 
 void main(void)
 {
@@ -255,19 +254,19 @@ void main(void)
   EA = 1;
   ET0 = 1;
   ET1 = 1;
-  TR0 = 1;                  //´ò¿ª¶¨Ê±Æ÷0£¬¶¨Ê±50ms
-  TR1 = 1;                  //´ò¿ªT1£¬¶¨Ê±23ms
-  P1 = 0x0f;                //¾ØÕó¼üÅÌ½ÓP1¿Ú£¬¸³³õÖµ
-  for(i = 0; i < 20; i++){  //×óÓÒ±ß½ç
+  TR0 = 1;                  //ï¿½ò¿ª¶ï¿½Ê±ï¿½ï¿½0ï¿½ï¿½ï¿½ï¿½Ê±50ms
+  TR1 = 1;                  //ï¿½ï¿½ï¿½ï¿½T1ï¿½ï¿½ï¿½ï¿½Ê±23ms
+  P1 = 0x0f;                //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì½ï¿½P1ï¿½Ú£ï¿½ï¿½ï¿½ï¿½ï¿½Öµ
+  for(i = 0; i < 20; i++){  //ï¿½ï¿½ï¿½Ò±ß½ï¿½
     groundx[i] = 0xc007;
     Area[i]=0xc007;
   }
-  groundx[19] = 0xffff;     //ÏÂ±ß½ç
+  groundx[19] = 0xffff;     //ï¿½Â±ß½ï¿½
   Area[19] = 0xffff;
-  lcd_initial();            //Òº¾§ÆÁ³õÊ¼»¯
-  bl=1;                     //±³¹â²ÉÓÃIO¿ØÖÆ£¬Ò²¿ÉÒÔÖ±½Ó½Óµ½¸ßµçÆ½³£ÁÁ
-  //»æ³öÓÎÏ·ÇøÓò
-  LCD_Clear(BLACK);		      //ºÚÉ«±³¾°
+  lcd_initial();            //Òºï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¼ï¿½ï¿½
+  bl=1;                     //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½IOï¿½ï¿½ï¿½Æ£ï¿½Ò²ï¿½ï¿½ï¿½ï¿½Ö±ï¿½Ó½Óµï¿½ï¿½ßµï¿½Æ½ï¿½ï¿½ï¿½ï¿½
+  //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï·ï¿½ï¿½ï¿½ï¿½
+  LCD_Clear(BLACK);		      //ï¿½ï¿½É«ï¿½ï¿½ï¿½ï¿½
   fillRectangle(0,0,16,160,BLUE);
   fillRectangle(0,152,128,8,BLUE);
   fillRectangle(104,0,24,160,BLUE);
@@ -275,22 +274,22 @@ void main(void)
 
   while(1)
   {
-    if(Down_Flag){                                      //downflag¶¨Ê±Æ÷T0¼ÆÊ±1.5s´¥·¢ÖÃÎ»£¬·½¿éÏÂ½µ
-      trackSquare_Read(square_x,square_y);              //¶ÁÈ¡×·×ÙÇøÓòÊý¾Ýµ½Tracksquare
-      if(!showTrackSquare_Down(square_x, square_y, 0)){ //ÅÐ¶ÏÊÇ·ñ´¥µ×£¬´¥µ×Ôò²»Ð´Èë×·×ÙÊý¾Ý£¬ÓÉ¸Ãº¯Êý½«Êý¾ÝÐ´Èë±³¾°ÇøÓò
-        trackSquare_Write(square_x,square_y);           //Ã»ÓÐ´¥µ×£¬TracksquareÊý¾ÝÐ´Èë×·×ÙÇøÓò
-        square_y++;                   //ÏÂÒÆÒ»¸ñ
+    if(Down_Flag){                                      //downflagï¿½ï¿½Ê±ï¿½ï¿½T0ï¿½ï¿½Ê±1.5sï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Î»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â½ï¿½
+      trackSquare_Read(square_x,square_y);              //ï¿½ï¿½È¡×·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ýµï¿½Tracksquare
+      if(!showTrackSquare_Down(square_x, square_y, 0)){ //ï¿½Ð¶ï¿½ï¿½Ç·ñ´¥µ×£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð´ï¿½ï¿½×·ï¿½ï¿½ï¿½ï¿½ï¿½Ý£ï¿½ï¿½É¸Ãºï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð´ï¿½ë±³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+        trackSquare_Write(square_x,square_y);           //Ã»ï¿½Ð´ï¿½ï¿½×£ï¿½Tracksquareï¿½ï¿½ï¿½ï¿½Ð´ï¿½ï¿½×·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+        square_y++;                   //ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½
       }
       else{
-        tetris_Clear();             //Ïû³ý
+        tetris_Clear();             //ï¿½ï¿½ï¿½ï¿½
         for(i = 0; i < 20; i++)
-        Area[i]=groundx[i];         //Í¬²½Êý¾Ý
+        Area[i]=groundx[i];         //Í¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
       }
-      Down_Flag = 0;                //Çå³ýÏÂ½µ±êÖ¾
+      Down_Flag = 0;                //ï¿½ï¿½ï¿½ï¿½ï¿½Â½ï¿½ï¿½ï¿½Ö¾
     }
-    if(!Left && Move_flag){         //×óÒÆÅÐ¶Ï£¬Í¬Ê±ÅÐ¶ÏÊÇ·ñÔÊÐíÒÆ¶¯²Ù×÷£¬moveflagÓÉT0¿ØÖÆ
+    if(!Left && Move_flag){         //ï¿½ï¿½ï¿½ï¿½ï¿½Ð¶Ï£ï¿½Í¬Ê±ï¿½Ð¶ï¿½ï¿½Ç·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½moveflagï¿½ï¿½T0ï¿½ï¿½ï¿½ï¿½
       delay(20);
-      if(!Left){                    //ÑÓÊ±Ïû¶¶£¬ÔÙ´ÎÅÐ¶Ï
+      if(!Left){                    //ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ù´ï¿½ï¿½Ð¶ï¿½
         trackSquare_Read(square_x,square_y);
         if(!showTrackSquare_Down(square_x, square_y, 1)){
           trackSquare_Write(square_x,square_y);
@@ -298,7 +297,7 @@ void main(void)
         }
       }
     }
-    if(!Right && Move_flag){        //ÓÒÒÆÅÐ¶Ï
+    if(!Right && Move_flag){        //ï¿½ï¿½ï¿½ï¿½ï¿½Ð¶ï¿½
       delay(20);
       if(!Right){
         trackSquare_Read(square_x,square_y);
@@ -308,7 +307,7 @@ void main(void)
         }
       }
     }
-    if(!Rota && Move_flag){        //Ðý×ªÅÐ¶Ï
+    if(!Rota && Move_flag){        //ï¿½ï¿½×ªï¿½Ð¶ï¿½
       delay(20);
       if(!Rota){
         trackSquare_Read(square_x,square_y);
@@ -316,7 +315,7 @@ void main(void)
           trackSquare_Write(square_x,square_y);
       }
     }
-    if(!fast){                    //¼ÓËÙÏÂ½µ
+    if(!fast){                    //ï¿½ï¿½ï¿½ï¿½ï¿½Â½ï¿½
       delay(20);
       if(!fast)
         Down_Flag = 1;
@@ -328,14 +327,14 @@ void main(void)
 void Timer0() interrupt 1
 {
   TH0 = 0x3C;
-  TL0 = 0xB0;                //¶¨Ê±50ms
+  TL0 = 0xB0;                //ï¿½ï¿½Ê±50ms
   count++;
-  if(count <= 22)           //Ç°22*50=1.1s¿ÉÒÔ½øÐÐ×óÓÒÒÆ¶¯²Ù×÷
+  if(count <= 22)           //Ç°22*50=1.1sï¿½ï¿½ï¿½Ô½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ¶ï¿½ï¿½ï¿½ï¿½ï¿½
     Move_flag = 1;
   else
     Move_flag = 0;
 
-  if(count >= 30){          //¶¨Ê±1.5s
+  if(count >= 30){          //ï¿½ï¿½Ê±1.5s
     count = 0;
     Down_Flag = 1;
   }
