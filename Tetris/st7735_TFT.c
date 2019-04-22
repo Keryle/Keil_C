@@ -17,6 +17,8 @@ unsigned int code tetrisData[6][4] = {
   {0x0660,0x0660,0x0660,0x0660}
 };
 unsigned int code *pTetris = tetrisData[0];
+unsigned int code *PTimer;
+unsigned char tcount = 0;
 sbit Left = P1^3;
 sbit Right = P1^2;
 sbit Rota = P1^1;
@@ -44,20 +46,6 @@ void fillPoint(unsigned char x, unsigned char y, unsigned int color ) {
   for(i = 64; i > 0; i-- )
     Lcd_WriteData_16(color);
 }
-//显示俄罗斯方块
-void print_Tetris(unsigned char x, unsigned char y, unsigned int cube, unsigned int color){
-  unsigned char row, i,bit_row,j;
-  for(i = 0; i < 4; i++){               //4行
-    row = cube & 0x0f;                  //取出低4位保存在row中
-    cube >>= 4;
-    bit_row = 0x08;
-    for(j=0; j < 4; j++){
-      if(row & bit_row)                 //按位判断，显示一行
-        fillPoint(x+j,y+3-i,color);     //先显示数据的低4位，y值反而最大
-      bit_row >>= 1;
-    }
-  }
-}
 
 //数据储存结构：一个16位int类型代表一行
 //高位为1代表左墙壁，低三位置1代表右墙壁
@@ -77,12 +65,13 @@ void trackSquare_Read(unsigned char x, unsigned char y){
 void trackSquare_Write(unsigned char x, unsigned char y){
   unsigned int xdata *p = Area;
   unsigned char i;
-  unsigned int a;
+  unsigned int a, and = 0x003f;         //  低六位置1
   p += y;
+  and <<= (9-x);                        //左移对位
   for(i = 0; i < 6; i++ ){
-    a = trackSquare[i];
-    a <<= (9-x);
-    *p = a;
+    a = trackSquare[i] << (9-x);
+    *p &= ~and;                         //取反相与，清空Area中的tracksquare区域
+    *p |= a;                            //与 新的数据
     p++;
   }
 
@@ -99,7 +88,7 @@ void tetris_Storage(unsigned char x, unsigned char y, unsigned char *p){
     p++;
     pgroundx++;
   }
-/*  a = 0x8000;
+/*  a = 0x8000;                     //debug
   for(i = 0; i < 16;i++){
     if(groundx[16] & a)
       fillPoint(i, 0, RED);
@@ -117,7 +106,7 @@ unsigned char showTrackSquare_Down(unsigned char x, unsigned char y, unsigned ch
   unsigned char row;
   unsigned int  row_int;
   for(i = 0; i < 6; i++)
-    temptrack[i] = *pTrack++;
+    temptrack[i] = *pTrack++; //上次记录数据暂存
 
   for(i = 0; i < 6; i++)
     trackSquare[i] = groundx[y+i] >> (9-x) & 0x3f; //背景数据写入tracksquare
@@ -126,12 +115,18 @@ unsigned char showTrackSquare_Down(unsigned char x, unsigned char y, unsigned ch
     for(i = 0; i < 4; i++){
       row = tetris[i] << 1;
       if(tetris[i+1] & trackSquare[4-i] >> 1){    //tracksquare 低6位中间4位保存数据，而teteris低四位保存数据， 右移一位
-        tetris_Storage(x,y,temptrack);
-        square_y = 0;
-        square_x = 3;
+        tetris_Storage(x,y,temptrack);            //判断是否触底，Tetris第1行与tracksquare第4行对位判断
+        square_y = 0;     //初始化y坐标
+        square_x = 3;     //初始化x坐标
+        pTetris = PTimer; //定时器随机指针赋值给pTetris
+        row_int = *pTetris;
+        for(i = 0; i < 4; i++){
+          tetris[3-i] = row_int & 0x0f;            //屏蔽高位，将数据写入tetris
+          row_int >>= 4;
+        }
         return 1;
       }
-      trackSquare[5-i] |= row;             //track区域与俄罗斯方块相或,保存这次移动操作的数据
+      trackSquare[5-i] |= row;                     //track区域与俄罗斯方块相或,保存这次移动操作的数据
     }
   else
     if(direction == 1)                             //左移
@@ -142,7 +137,7 @@ unsigned char showTrackSquare_Down(unsigned char x, unsigned char y, unsigned ch
         trackSquare[4-i] |= row;
       }
     else
-      if(direction == 2)                          //右移
+      if(direction == 2)                           //右移
         for(i = 0; i < 4; i++){
           row = tetris[i];
           if(tetris[i] & trackSquare[4-i])
@@ -150,22 +145,22 @@ unsigned char showTrackSquare_Down(unsigned char x, unsigned char y, unsigned ch
           trackSquare[4-i] |= row;
         }
       else
-        if(direction == 3){                     //旋转
+        if(direction == 3){                        //旋转
           row_int = *(pTetris + rotate);
           rotate++;
           if(rotate > 3)
             rotate = 0;
           for(i = 0; i < 4; i++){
-            tetris[3-i] = row_int & 0x0f;
+            tetris[3-i] = row_int & 0x0f;          //屏蔽高位，将数据写入tetris
             row_int >>= 4;
-          }                                     //写入tetris
+          }
           for(i = 0; i < 4; i++){
             row = tetris[i] << 1;
-            if(tetris[i] & trackSquare[4-i] >> 1){   //判断是否可以旋转
+            if(tetris[i] & trackSquare[4-i] >> 1){   //判断是否可以旋转，对应行相与
               rotate--;
               row_int = *(pTetris + rotate);
               for(i = 0; i < 4; i++){
-                tetris[3-i] = row_int & 0x0f;
+                tetris[3-i] = row_int & 0x0f;        //与值为真返回前一次的数据
                 row_int >>= 4;
               }
               return 1;
@@ -208,26 +203,28 @@ void main(void)
 {
   unsigned char i;
   PT0 = 1;
-  TMOD = 0x01;
+  TMOD = 0x11;
   TH0 = 0x3C;
   TL0 = 0xB0;
+  TH1 = 0xa6;
+  TL1 = 0x28;
   EA = 1;
   ET0 = 1;
+  ET1 = 1;
   TR0 = 1;                  //打开定时器0，定时50ms
+  TR1 = 1;                  //打开T0，定时23ms
   P1 = 0x0f;                //矩阵键盘接P1口，赋初值
-  for(i = 0; i < 20; i++){
+  for(i = 0; i < 20; i++){  //左右边界
     groundx[i] = 0xc007;
     Area[i]=0xc007;
   }
-
-  groundx[19] = 0xffff;
+  groundx[19] = 0xffff;     //下边界
   Area[19] = 0xffff;
-  //Area[19] = 0xffff;
-  lcd_initial(); //液晶屏初始化
-  bl=1;//背光采用IO控制，也可以直接接到高电平常亮
-  //LCD_Clear(BLACK);		//黑色
 
-  //print_Tetris(square_x+1,6,0x88c0,YELLOW);
+  lcd_initial();            //液晶屏初始化
+  bl=1;                     //背光采用IO控制，也可以直接接到高电平常亮
+  //LCD_Clear(BLACK);		    //黑色
+
   delay(500);
   trackSquare_Read(square_x,square_y);
 
@@ -273,7 +270,7 @@ void main(void)
           trackSquare_Write(square_x,square_y);
       }
     }
-    if(!fast){
+    if(!fast){                    //加速下降
       delay(20);
       if(!fast)
         Down_Flag = 1;
@@ -296,4 +293,14 @@ void Timer0() interrupt 1
     count = 0;
     Down_Flag = 1;
   }
+}
+
+void Timer1() interrupt 3
+{
+  TH1 = 0xa6;
+  TL1 = 0x28;
+  if(tcount > 5)
+    tcount = 0;
+  PTimer = tetrisData[tcount];
+  tcount++;
 }
