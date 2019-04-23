@@ -207,9 +207,7 @@ void tetris_Clear(void)
   pRead = &groundx_bak[18];     //从倒数第二行读数据
   pWrite = &groundx[18];        //从倒数第二行写数据
   for(i = 0; i < 17; i++){
-    if(*pRead == 0xffff)    pRead--;        // 1
-    if(*pRead == 0xffff)    pRead--;        // 2 一行全为1 则跳过这一行
-                                            //最多同时消除两行，要消除更多行，将123加入循环
+    while(*pRead == 0xffff)    pRead--;        // 一行全为1 则跳过这一行
     *pWrite = *pRead;                       // 3 写入
   //  if(*pRead == 0)             //遇到空行 写入0
     //  *pWrite = 0;
